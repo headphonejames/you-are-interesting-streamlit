@@ -1,34 +1,101 @@
 import streamlit as st
+from pandas import DataFrame
 from google.oauth2 import service_account
-from gsheetsdb import connect
+from gspread_pandas import Spread,Client
 
-# Create a connection object.
+# Create a Google Authentication connection object
+scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
+
 credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=[
-        "https://www.googleapis.com/auth/spreadsheets",
-    ],
-)
-conn = connect(credentials=credentials)
+    st.secrets["gcp_service_account"], scopes = scope)
+client = Client(scope=scope,creds=credentials)
+spreadsheetname = "initial you are interesting"
+spread = Spread(spreadsheetname,client = client)
 
-# Perform SQL query on the Google Sheet.
-# Uses st.cache to only rerun when the query changes or after 10 min.
-@st.cache(ttl=600)
-def run_query(query):
-    rows = conn.execute(query, headers=1)
-    rows = rows.fetchall()
-    return rows
+# Check the connection
+st.write(spread.url)
 
-sheet_url = st.secrets["private_gsheets_url"]
-rows = run_query(f'SELECT * FROM "{sheet_url}"')
+sh = client.open(spreadsheetname)
+worksheet_list = sh.worksheets()
 
-# Print results.
-for row in rows:
-    st.write(f"{row.name} has a :{row.pet}:")
+# Functions
+@st.cache()
+# Get our worksheet names
+def worksheet_names():
+    sheet_names = []
+    for sheet in worksheet_list:
+        sheet_names.append(sheet.title)
+    return sheet_names
+
+# Get the sheet as dataframe
+def load_the_spreadsheet(spreadsheetname):
+    worksheet = sh.worksheet(spreadsheetname)
+    df = DataFrame(worksheet.get_all_records())
+    return df
+
+# Update to Sheet
+def update_the_spreadsheet(spreadsheetname,dataframe):
+    col = ['Compound CID','Time_stamp']
+    spread.df_to_sheet(dataframe[col],sheet = spreadsheetname,index = False)
+    st.sidebar.info('Updated to GoogleSheet')
 
 
+st.header('Streamlit Chemical Inventory')
+
+
+# Check whether the sheets exists
+what_sheets = worksheet_names()
+#st.sidebar.write(what_sheets)
+ws_choice = st.sidebar.radio('Available worksheets',what_sheets)
+
+# Load data from worksheets
+df = load_the_spreadsheet(ws_choice)
+print(df)
+st.write(df)
+# # Show the availibility as selection
+# select_CID = st.sidebar.selectbox('CID',list(df['Compound CID']))
+#
+# # Now we can use the pubchempy module to dump information
+# comp = pcp.Compound.from_cid(select_CID)
+# comp_dict = comp.to_dict() # Converting to a dictinoary
+# # What Information look for ?
+# options = ['molecular_weight' ,'molecular_formula',
+#            'charge','atoms','elements','bonds']
+# show_me = st.radio('What you want to see?',options)
+#
+# st.info(comp_dict[show_me])
+# name = comp_dict['iupac_name']
+# st.markdown(name)
+# plot = st.checkbox('Canonical Smiles Plot')
+#
+# if plot:
+#     sm = comp_dict['canonical_smiles']
+#     mol = read_smiles(comp_dict['canonical_smiles'])
+#     elements = nx.get_node_attributes(mol, name = "element")
+#     nx.draw(mol, with_labels=True, labels = elements, pos=nx.spring_layout(mol))
+#     fig , ax = plt.subplots()
+#     nx.draw(mol, with_labels=True, labels = elements, pos = nx.spring_layout(mol))
+#     st.pyplot(fig)
+#
+# add = st.sidebar.checkbox('Add CID')
+# if add :
+#     cid_entry = st.sidebar.text_input('New CID')
+#     confirm_input = st.sidebar.button('Confirm')
+#
+#     if confirm_input:
+#         now = datetime.now()
+#         opt = {'Compound CID': [cid_entry],
+#                'Time_stamp' :  [now]}
+#         opt_df = DataFrame(opt)
+#         df = load_the_spreadsheet('Pending CID')
+#         new_df = df.append(opt_df,ignore_index=True)
+#         update_the_spreadsheet('Pending CID',new_df)
+
+# initialize worker list
 if 'workers' not in st.session_state:
-    st.session_state.workers = ['james', 'not james']
+    workers = ['james']
+    st.session_state.workers = workers
 
 wlist = st.session_state.workers
 

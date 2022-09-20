@@ -7,7 +7,8 @@ name = "pypi"
 streamlit = "*"
 watchdog = "*"
 pandas = "*"
-gsheetsdb = "*"
+gspread = "*"
+gspread-pandas = "*"
 
 [dev-packages]
 
