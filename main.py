@@ -4,6 +4,10 @@ import df_funcs as df_func
 
 #constants
 worker_table_name = "workers"
+
+if 'modded' not in st.session_state:
+    st.session_state.modded = False
+
 def set_df(new_df):
     st.session_state.dataframe = new_df
 
@@ -18,6 +22,7 @@ def remove_worker(worker, index):
     #Remove worker from list in data table
     asdf = df_func.remove_col(get_df(), index)
     set_df(asdf)
+    st.session_state.modded = True
     # set_df(df_func.remove_col(get_df(), index))
 
 def add_worker():
@@ -27,6 +32,7 @@ def add_worker():
         set_df(df_func.add_col(get_df(),  worker_name))
         # clear state
         st.session_state.worker_name = ''
+        st.session_state.modded = True
 
 st.title('Who is staffing?')
 
@@ -43,5 +49,6 @@ st.text_input(label="worker name", placeholder="worker name", on_change=add_work
 def done():
     # update sheet
     gsheets.update_the_table(get_df(), worker_table_name)
+    st.session_state.modded = False
 
-st.button("submit", on_click=done)
+st.button("submit", on_click=done, disabled=not st.session_state.modded)
