@@ -1,7 +1,10 @@
 import streamlit as st
 import google_sheets_funcs as gsheets
 import df_funcs as df_func
+
+#constants
 worker_table_name = "workers"
+
 
 def set_df(new_df):
     st.session_state.dataframe = new_df
@@ -19,26 +22,25 @@ if 'workers' not in st.session_state:
         workers = get_df()["workers"].values.tolist()
     st.session_state.workers = workers
 
+#local vars
 wlist = st.session_state.workers
 
 def remove_worker(worker, index):
+    #Remove worker from list in data table
     set_df(df_func.remove_col(get_df(), index-1))
+    #Remove worker name from ui list
     wlist.remove(worker)
+    # update sheet
     gsheets.update_the_table(get_df(), worker_table_name)
 
 def add_worker():
     worker_name = st.session_state.worker_name
     if not worker_name in wlist:
-        # add to local list
+        # add to ui list
         wlist.append(worker_name)
-        print("as12")
-        print(get_df())
-        print("as34")
-        set_df(df_func.add_col(get_df(), worker_table_name, worker_name))
-        print(get_df())
-        print("as56")
-
-    # update sheet
+        #update datatable
+        set_df(df_func.add_col(get_df(),  worker_name))
+        # update sheet
         gsheets.update_the_table(get_df(), worker_table_name)
         # clear state
         st.session_state.worker_name = ''

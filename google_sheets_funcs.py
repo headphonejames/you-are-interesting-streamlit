@@ -37,13 +37,16 @@ credentials = service_account.Credentials.from_service_account_info(
 
 spread, client, sh = get_spread(credentials)
 
+@st.cache(ttl = cache_time)
 def get_worksheet_list():
     return get_worksheets(sh)
 
+@st.cache(ttl = cache_time)
 def get_worksheet(name):
     return get_worksheet_list()[name]
 
 # Get the sheet as dataframe
+@st.cache(allow_output_mutation=True, ttl = cache_time)
 def load_the_table(table_name):
     worksheet = sh.worksheet(table_name)
     df = DataFrame(worksheet.get_all_records())
@@ -51,8 +54,6 @@ def load_the_table(table_name):
 
 # Update to Sheet
 def update_the_table(dataframe, table_name):
-    print("updating sheet with")
-    print(dataframe)
     spread.df_to_sheet(dataframe, sheet = table_name, replace = True, index = False)
-    st.sidebar.info('Updated to GoogleSheet')
+    # st.sidebar.info('Updated to GoogleSheet')
     return dataframe
