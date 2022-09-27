@@ -9,7 +9,6 @@ message = """
 
 st.set_page_config(layout = "wide") # optional
 
-st.header("National Statistics")
 
 
 # Global arrays for holding the app names, modules and descriptions of the apps

@@ -1,10 +1,10 @@
 from pandas import DataFrame
 
-def set_df(st, new_df):
-    st.session_state.dataframe = new_df
+def set_df(st, key, new_df):
+    st.session_state[key] = new_df
 
-def get_df(st):
-    return st.session_state.dataframe
+def get_df(st, key):
+    return st.session_state[key]
 
 
 def remove_col(df, index):

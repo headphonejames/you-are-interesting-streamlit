@@ -7,7 +7,7 @@ questions_table_name = "questions"
 questions_label_name = "questions"
 questions_column_name = "questions"
 questions_key_name = "questions"
-
+questions_df_key = "questions_dataframe"
 def run():
     #constants
 
@@ -15,30 +15,30 @@ def run():
         st.session_state.modded = False
 
     # initialize dataframe
-    if 'dataframe' not in st.session_state:
-        df_func.set_df(st, gsheets.load_the_table(questions_table_name))
+    if questions_df_key not in st.session_state:
+        df_func.set_df(st, questions_df_key, gsheets.load_the_table(questions_table_name))
 
     # initialize question list
-    if not questions_column_name in df_func.get_df(st):
+    if not questions_column_name in df_func.get_df(st, questions_df_key):
         # add questions colum to datatabe
-        updated_df = df_func.get_df(st)[questions_column_name] = []
-        df_func.set_df(st, updated_df)
+        updated_df = df_func.get_df(st, questions_df_key)[questions_column_name] = []
+        df_func.set_df(st, questions_df_key,updated_df)
 
     def remove_question(question, index):
-        df = df_func.get_df(st)
+        df = df_func.get_df(st, questions_df_key)
         #Remove question from list in data table
         new_df = df_func.remove_col(df, index)
-        df_func.set_df(st, new_df)
+        df_func.set_df(st, questions_df_key, new_df)
         st.session_state.modded = True
-        # set_df(st, df_func.remove_col(df_func.get_df(st), index))
+        # set_df(st, df_func.remove_col(df_func.get_df(st, questions_df_key), index))
 
     def clear_state(df):
-        df_func.set_df(st, df)
+        df_func.set_df(st, questions_df_key, df)
         st.session_state.questions_key = ''
         st.session_state.modded = True
 
     def add_question():
-        df = df_func.get_df(st)
+        df = df_func.get_df(st, questions_df_key)
         question = st.session_state.questions_key
         # check if questions already exists
         if not question in df[questions_column_name].tolist():
@@ -49,7 +49,7 @@ def run():
     st.title('Prompts for connection')
 
     index = 0
-    df = df_func.get_df(st)
+    df = df_func.get_df(st, questions_df_key)
     if "questions" in df:
         for question in df["questions"]:
             index = index + 1
@@ -61,7 +61,7 @@ def run():
 
     def done():
         # update sheet
-        gsheets.update_the_table(df_func.get_df(st), questions_table_name)
+        gsheets.update_the_table(df_func.get_df(st, questions_df_key), questions_table_name)
         st.session_state.modded = False
 
     st.button("submit", on_click=done, disabled=(not st.session_state.modded))
