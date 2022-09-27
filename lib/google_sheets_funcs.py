@@ -8,9 +8,11 @@ scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
 xls_name = "initial you are interesting"
-cache_time = 20
+
+cache_time = 0
+
 # Functions
-@st.cache(ttl = cache_time)
+# @st.cache(ttl = cache_time)
 # Get our worksheet names
 def get_worksheet_names(worksheet_list):
     sheet_names = []
@@ -19,14 +21,14 @@ def get_worksheet_names(worksheet_list):
     return sheet_names
 
 
-@st.cache(allow_output_mutation=True)
+# @st.cache(allow_output_mutation=True)
 def get_spread(credentials):
     client = Client(scope=scope,creds=credentials)
     spread = Spread(xls_name, client = client)
     sh = client.open(xls_name)
     return spread, client, sh
 
-@st.cache(ttl = cache_time)
+# @st.cache(ttl = cache_time)
 def get_worksheets(sh):
     # Check whether the sheets exists
     return sh.worksheets()
@@ -37,16 +39,16 @@ credentials = service_account.Credentials.from_service_account_info(
 
 spread, client, sh = get_spread(credentials)
 
-@st.cache(ttl = cache_time)
+# @st.cache(ttl = cache_time)
 def get_worksheet_list():
     return get_worksheets(sh)
 
-@st.cache(ttl = cache_time)
+# @st.cache(ttl = cache_time)
 def get_worksheet(name):
     return get_worksheet_list()[name]
 
 # Get the sheet as dataframe
-@st.cache(allow_output_mutation=True, ttl = cache_time)
+# @st.cache(allow_output_mutation=True, ttl = cache_time)
 def load_the_table(table_name):
     worksheet = sh.worksheet(table_name)
     df = DataFrame(worksheet.get_all_records())

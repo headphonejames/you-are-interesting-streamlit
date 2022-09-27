@@ -1,54 +1,48 @@
 import streamlit as st
-import google_sheets_funcs as gsheets
-import df_funcs as df_func
+import importlib
+# import pages    # default library name for apps
+from pages import pagesContents
 
-#constants
-worker_table_name = "workers"
+message = """
+        __Select an application from the list below__
+        """
 
-if 'modded' not in st.session_state:
-    st.session_state.modded = False
+st.set_page_config(layout = "wide") # optional
 
-def set_df(new_df):
-    st.session_state.dataframe = new_df
+st.header("National Statistics")
 
-def get_df():
-    return st.session_state.dataframe
 
-# initialize worker list
-if 'dataframe' not in st.session_state:
-    set_df(gsheets.load_the_table(worker_table_name))
+# Global arrays for holding the app names, modules and descriptions of the apps
+pageNames = pagesContents.pages()
+descriptions = []
+modules = []
 
-def remove_worker(worker, index):
-    #Remove worker from list in data table
-    asdf = df_func.remove_col(get_df(), index)
-    set_df(asdf)
-    st.session_state.modded = True
-    # set_df(df_func.remove_col(get_df(), index))
+# Find the apps and import them
+for pagename in pageNames:
+    m = importlib.import_module('.' + pagename, 'pages')
+    modules.append(m)
+    # If the module has a description attribute use that in the select box
+    # otherwise use the module name
+    try:
+        descriptions.append(m.description)
+    except:
+        descriptions.append(pagename)
 
-def add_worker():
-    worker_name = st.session_state.worker_name
-    if not worker_name in get_df()["workers"]:
-        #update datatable
-        set_df(df_func.add_col(get_df(),  worker_name))
-        # clear state
-        st.session_state.worker_name = ''
-        st.session_state.modded = True
+# Define a function to display the app
+# descriptions instead of the module names
+# in the selctbox, below
+def format_func(name):
+    return descriptions[pageNames.index(name)]
 
-st.title('Who is staffing?')
 
-index = 0
-for worker in get_df()["workers"]:
-    index = index + 1
-    st.checkbox(worker, key="id_{}".format(worker),  on_change=remove_worker, args=(worker, index, ))
+# Display the sidebar with a menu of apps
+with st.sidebar:
+    st.markdown(message)
+    page = st.selectbox('Select:', pageNames, format_func=format_func)
 
-col1, col2 = st.columns([1,1])
+# Run the chosen app
+modules[pageNames.index(page)].run()
 
-st.session_state.worker_name = ''
-st.text_input(label="worker name", placeholder="worker name", on_change=add_worker, key='worker_name')
-
-def done():
-    # update sheet
-    gsheets.update_the_table(get_df(), worker_table_name)
-    st.session_state.modded = False
-
-st.button("submit", on_click=done, disabled=not st.session_state.modded)
+#st.write(f"Modules: {modules}")
+#st.write(f"Module Names: {moduleNames}")
+#st.write(f"Description: {descriptions}")
