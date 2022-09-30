@@ -2,7 +2,7 @@ import streamlit as st
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 
-def execute(df_key, table_name, label_name, column_name, item_name, item_key, session_list_key):
+def execute(df_key, table_name, column_name, item_name, session_list_key):
     # initialize dataframe
     if df_key not in st.session_state:
         df_func.set_df(st, df_key, gsheets.load_the_table(table_name))
@@ -19,7 +19,7 @@ def execute(df_key, table_name, label_name, column_name, item_name, item_key, se
 
     def clear_state(df):
         df_func.set_df(st, df_key, df)
-        st.session_state[item_key] = ''
+        st.session_state[column_name] = ''
 
     def toggle_item(item, index):
         list_from_session = st.session_state[session_list_key]

@@ -10,8 +10,7 @@ def execute():
         table_name=constants.workers_table_name,
         label_name=constants.workers_label_name,
         column_name=constants.workers_column_name,
-        item_name=constants.workers_item_name,
-        item_key=constants.worker_input_key)
+        item_name=constants.workers_item_name)
 
     st.button("return to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})
 

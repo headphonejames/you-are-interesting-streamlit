@@ -10,8 +10,7 @@ def execute():
         table_name=constants.questions_table_name,
         label_name=constants.questions_label_name,
         column_name=constants.questions_column_name,
-        item_name=constants.questions_item_name,
-        item_key=constants.question_input_key)
+        item_name=constants.questions_item_name)
 
     st.button("return to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})
 

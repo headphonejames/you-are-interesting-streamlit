@@ -2,7 +2,7 @@ import streamlit as st
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 
-def execute(df_key, table_name, label_name, columns_names, item_name, item_key):
+def execute(df_key, table_name, label_name, columns_names, item_key_column_name, item_key):
     #constants
     if 'modded' not in st.session_state:
         st.session_state.modded = False
@@ -31,7 +31,8 @@ def execute(df_key, table_name, label_name, columns_names, item_name, item_key):
 
     def clear_state(df):
         df_func.set_df(st, df_key, df)
-        st.session_state[item_key] = ''
+        for column_name in columns_names:
+            st.session_state[column_name] = ''
         st.session_state.modded = True
 
     def add_item():
@@ -46,13 +47,13 @@ def execute(df_key, table_name, label_name, columns_names, item_name, item_key):
     index = 0
     df = df_func.get_df(st, df_key)
 
-    if item_name in df:
-        for item in df[item_name]:
+    if item_key_column_name in df:
+        for item in df[item_key_column_name]:
             index = index + 1
-            st.checkbox(item, key="id_{}".format(item),  on_change=remove_item, args=(item, index, ))
+            st.checkbox(item[item_key], key="id_{}".format(item),  on_change=remove_item, args=(item, index, ))
 
     st.session_state.item_name = ''
-    st.text_input(label='', placeholder=label_name, on_change=add_item, key=item_key)
+    st.text_input(label='', placeholder=label_name, on_change=add_item, key=item_key_column_name)
 
     def done():
         # update sheet
