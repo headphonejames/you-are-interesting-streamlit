@@ -11,7 +11,7 @@ def execute(df_key, table_name, label_name, column_name, item_name, item_key):
     if df_key not in st.session_state:
         df_func.set_df(st, df_key, gsheets.load_the_table(table_name))
 
-    # initialize question list
+    # initialize list of items
     if not column_name in df_func.get_df(st, df_key):
         # add item column to datatable
         updated_df = df_func.get_df(st, df_key)[column_name] = []
