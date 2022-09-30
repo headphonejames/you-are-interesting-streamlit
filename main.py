@@ -12,7 +12,7 @@ current_page = st.session_state[constants.CURRENT_PAGE]
 
 if current_page == constants.ENRTY:
     entry_page.execute()
-elif current_page == constants.workers_table:
+elif current_page == constants.WORKERS:
     workers_page.execute()
 elif current_page == constants.START_SHIFT:
     start_shift_page.execute()

@@ -1,7 +1,9 @@
-#constants
+#page constants
 CURRENT_PAGE = "currentpage"
 ENRTY = "entry"
 START_SHIFT = "startshift"
+QUESTIONS = "questions"
+WORKERS = "workers"
 
 workers_table = "workers"
 workers_table_name = "workers"

@@ -13,7 +13,7 @@ def execute():
         item_name=constants.workers_item_name,
         item_key=constants.worker_input_key)
 
-    st.button("return to main", on_click=util.update_state, kwargs={"page": constants.ENRTY})
+    st.button("return to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})
 
 
 # This code allows you to run the app standalone
