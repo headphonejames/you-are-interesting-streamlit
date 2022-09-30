@@ -1,43 +1,23 @@
-import streamlit as st
-import pandas as pd
+from crud_items_list import execute
 
+questions_table_name = "questions"
+questions_label_name = "A prompt or question"
+questions_column_name = "questions"
+questions_dataframe_key_name = "questions_dataframe"
+title = "Prompts from connections"
+item_name = "questions"
+question_input_key = "questions_input"
 
-if 'num' not in st.session_state:
-    st.session_state.num = 1
-if 'data' not in st.session_state:
-    st.session_state.data = []
+def run():
+    execute(questions_dataframe_key_name,
+            questions_table_name,
+            questions_label_name,
+            questions_column_name,
+            title,
+            item_name,
+            question_input_key)
 
-
-class NewStudent:
-    def __init__(self, page_id):
-        st.title(f"Student N°{page_id}")
-        self.name = st.text_input("Name")
-        self.age = st.text_input("Age")
-
-
-def main():
-    placeholder = st.empty()
-    placeholder2 = st.empty()
-
-    while True:
-        num = st.session_state.num
-
-        if placeholder2.button('end', key=num):
-            placeholder2.empty()
-            df = pd.DataFrame(st.session_state.data)
-            st.dataframe(df)
-            break
-        else:
-            with placeholder.form(key=str(num)):
-                new_student = NewStudent(page_id=num)
-
-                if st.form_submit_button('register'):
-                    st.session_state.data.append({
-                        'id': num, 'name': new_student.name, 'age': new_student.age})
-                    st.session_state.num += 1
-                    placeholder.empty()
-                    placeholder2.empty()
-                else:
-                    st.stop()
-
-main()
+# This code allows you to run the app standalone
+# as well as part of a library of apps
+if __name__ == "__main__":
+    run()

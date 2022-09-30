@@ -34,7 +34,6 @@ def execute(df_key, table_name, label_name, column_name, title, item_name, item_
     def add_item():
         df = df_func.get_df(st, df_key)
         item = st.session_state[item_key]
-        print(item)
         # check if questions already exists
         if not item in df[column_name].tolist():
             #update datatable
@@ -59,4 +58,4 @@ def execute(df_key, table_name, label_name, column_name, title, item_name, item_
         gsheets.update_the_table(df_func.get_df(st, df_key), table_name)
         st.session_state.modded = False
 
-    st.button("submit", on_click=done, disabled=(not st.session_state.modded))
+    st.button("commit to db", on_click=done, disabled=(not st.session_state.modded))
