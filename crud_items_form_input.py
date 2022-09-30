@@ -2,7 +2,7 @@ import streamlit as st
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 
-def execute(df_key, table_name, label_name, column_name, item_name, item_key):
+def execute(df_key, table_name, label_name, columns_names, item_name, item_key):
     #constants
     if 'modded' not in st.session_state:
         st.session_state.modded = False
@@ -11,11 +11,14 @@ def execute(df_key, table_name, label_name, column_name, item_name, item_key):
     if df_key not in st.session_state:
         df_func.set_df(st, df_key, gsheets.load_the_table(table_name))
 
+    df = df_func.get_df(st, df_key)
+
     # initialize list of items
-    if not column_name in df_func.get_df(st, df_key):
-        # add item column to datatable
-        updated_df = df_func.get_df(st, df_key)[column_name] = []
-        df_func.set_df(st, df_key, updated_df)
+    for column_name in columns_names:
+        if not column_name in df:
+            # add item column to datatable
+            updated_df = df_func.get_df(st, df_key)[column_name] = []
+            df_func.set_df(st, df_key, updated_df)
 
 
     def remove_item(item, index):
@@ -35,7 +38,7 @@ def execute(df_key, table_name, label_name, column_name, item_name, item_key):
         df = df_func.get_df(st, df_key)
         item = st.session_state[item_key]
         # check if items already exists
-        if not item in df[column_name].tolist():
+        if not item in df[columns_names].tolist():
             #update datatable
             df = df_func.add_col(df, [item])
             clear_state(df)

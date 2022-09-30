@@ -6,6 +6,8 @@ from lib import df_funcs as df_func
 
 def start_shift(worker, index):
     print(worker)
+    # create table if does not already exist
+    # go to waiting_for_friend
 
 def execute():
     # initialize dataframe
