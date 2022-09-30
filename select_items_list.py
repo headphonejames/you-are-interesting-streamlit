@@ -1,8 +1,6 @@
 import streamlit as st
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
-import util
-import constants
 
 def execute(df_key, table_name, label_name, column_name, item_name, item_key, session_list_key):
     # initialize dataframe
@@ -27,7 +25,6 @@ def execute(df_key, table_name, label_name, column_name, item_name, item_key, se
         list_from_session = st.session_state[session_list_key]
         if not item in list_from_session:
             list_from_session.append(item)
-        print(list_from_session)
 
     index = 0
     df = df_func.get_df(st, df_key)

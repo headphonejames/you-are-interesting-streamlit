@@ -2,7 +2,7 @@ import streamlit as st
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 
-def execute(df_key, table_name, label_name, column_name, title, item_name, item_key):
+def execute(df_key, table_name, label_name, column_name, item_name, item_key):
     #constants
     if 'modded' not in st.session_state:
         st.session_state.modded = False
@@ -39,8 +39,6 @@ def execute(df_key, table_name, label_name, column_name, title, item_name, item_
             #update datatable
             df = df_func.add_col(df, [item])
             clear_state(df)
-
-    st.title(title)
 
     index = 0
     df = df_func.get_df(st, df_key)
