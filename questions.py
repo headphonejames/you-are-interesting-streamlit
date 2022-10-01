@@ -1,21 +1,21 @@
 from crud_items_list import execute
 
-questions_table_name = "questions"
-questions_label_name = "A prompt or question"
-questions_column_name = "questions"
-questions_dataframe_key_name = "questions_dataframe"
+prompts_table_name = "prompts"
+prompts_label_name = "A prompt or prompt"
+prompts_column_name = "prompts"
+prompts_dataframe_key_name = "prompts_dataframe"
 title = "Prompts from connections"
-item_name = "questions"
-question_input_key = "questions_input"
+item_name = "prompts"
+prompt_input_key = "prompts_input"
 
 def run():
-    execute(questions_dataframe_key_name,
-            questions_table_name,
-            questions_label_name,
-            questions_column_name,
+    execute(prompts_dataframe_key_name,
+            prompts_table_name,
+            prompts_label_name,
+            prompts_column_name,
             title,
             item_name,
-            question_input_key)
+            prompt_input_key)
 
 # This code allows you to run the app standalone
 # as well as part of a library of apps

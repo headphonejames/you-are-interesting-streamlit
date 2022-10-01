@@ -3,7 +3,7 @@ import constants
 import page_entry
 import page_workers
 import page_select_current_worker
-import page_questions
+import page_prompts
 
 # init current page state
 if constants.CURRENT_PAGE not in st.session_state:
@@ -15,7 +15,7 @@ if current_page == constants.ENRTY:
     page_entry.execute()
 elif current_page == constants.WORKERS:
     page_workers.execute()
-elif current_page == constants.QUESTIONS:
-    page_questions.execute()
+elif current_page == constants.PROMPTS:
+    page_prompts.execute()
 elif current_page == constants.START_SHIFT:
     page_select_current_worker.execute()

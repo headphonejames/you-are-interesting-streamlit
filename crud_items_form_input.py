@@ -6,20 +6,14 @@ def execute(df_key, table_name, label_name, columns_names, item_key_column_name,
     #constants
     if 'modded' not in st.session_state:
         st.session_state.modded = False
+        st.session_state["data"] = {}
 
     # initialize dataframe
     if df_key not in st.session_state:
-        df_func.set_df(st, df_key, gsheets.load_the_table(table_name))
+        df = gsheets.load_or_create_the_table(table_name, columns_names)
+        df_func.set_df(st=st, key=df_key, new_df=df)
 
     df = df_func.get_df(st, df_key)
-
-    # initialize list of items
-    for column_name in columns_names:
-        if not column_name in df:
-            # add item column to datatable
-            updated_df = df_func.get_df(st, df_key)[column_name] = []
-            df_func.set_df(st, df_key, updated_df)
-
 
     def remove_item(item, index):
         df = df_func.get_df(st, df_key)
@@ -35,13 +29,18 @@ def execute(df_key, table_name, label_name, columns_names, item_key_column_name,
             st.session_state[column_name] = ''
         st.session_state.modded = True
 
-    def add_item():
+    def update_text(column_name):
+        text_input = st.session_state[column_name]
+        st.session_state["data"][column_name] = text_input
+
+    def add_items():
+        data = st.session_state["data"]
         df = df_func.get_df(st, df_key)
-        item = st.session_state[item_key]
+        item_key_data = data[columns_names[0]]
         # check if items already exists
-        if not item in df[columns_names].tolist():
+        if not item_key_data in df[columns_names[0]].tolist():
             #update datatable
-            df = df_func.add_col(df, [item])
+            df = df_func.add_row(df, data)
             clear_state(df)
 
     index = 0
@@ -50,14 +49,16 @@ def execute(df_key, table_name, label_name, columns_names, item_key_column_name,
     if item_key_column_name in df:
         for item in df[item_key_column_name]:
             index = index + 1
-            st.checkbox(item[item_key], key="id_{}".format(item),  on_change=remove_item, args=(item, index, ))
+            st.checkbox(item, key="id_{}".format(item),  on_change=remove_item, args=(item, index, ))
 
-    st.session_state.item_name = ''
-    st.text_input(label='', placeholder=label_name, on_change=add_item, key=item_key_column_name)
+    for column_name in columns_names:
+        st.text_input(label=column_name, on_change=update_text, key=column_name, args=(column_name,))
+
+    st.button(label="add {}".format(table_name), on_click=add_items)
 
     def done():
         # update sheet
-        gsheets.update_the_table(df_func.get_df(st, df_key), table_name)
+        gsheets.create_of_update_the_table(df_func.get_df(st, df_key), table_name)
         st.session_state.modded = False
 
     st.button("commit to db", on_click=done, disabled=(not st.session_state.modded))

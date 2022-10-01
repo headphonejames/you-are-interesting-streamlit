@@ -49,13 +49,20 @@ def get_worksheet(name):
 
 # Get the sheet as dataframe
 @st.cache(allow_output_mutation=True, ttl = cache_time)
-def load_the_table(table_name):
-    worksheet = sh.worksheet(table_name)
-    df = DataFrame(worksheet.get_all_records())
-    return df
+def load_or_create_the_table(table_name, columns):
+    try:
+        worksheet = sh.worksheet(table_name)
+        df = Spread.sheet_to_df(sheet=worksheet)
+        return df
+    except:
+        # create the dataframe for the table
+        df = DataFrame([], columns=columns)
+        # create the table
+        create_of_update_the_table(dataframe=df, table_name=table_name)
+        return df
 
 # Update to Sheet
-def update_the_table(dataframe, table_name):
+def create_of_update_the_table(dataframe, table_name):
     spread.df_to_sheet(dataframe, sheet = table_name, replace = True, index = False)
     # st.sidebar.info('Updated to GoogleSheet')
     return dataframe

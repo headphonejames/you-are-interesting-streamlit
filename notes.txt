@@ -2,4 +2,6 @@ https://docs.streamlit.io/knowledge-base/tutorials/databases/private-gsheet
 https://docs.gspread.org/en/v5.4.0/
 
 # todo
-add worker contact input
+# create table in sheet if not exist!
+# update a row at a time
+# add worker contact input

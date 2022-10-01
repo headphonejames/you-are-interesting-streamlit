@@ -12,7 +12,8 @@ def start_shift(worker, index):
 def execute():
     # initialize dataframe
     if constants.workers_dataframe_key_name not in st.session_state:
-        df_func.set_df(st, constants.workers_dataframe_key_name, gsheets.load_the_table(constants.workers_table_name))
+        df = gsheets.load_or_create_the_table(constants.workers_table_name, ["name", "contact"])
+        df_func.set_df(st, constants.workers_dataframe_key_name, df)
 
     index = 0
     df = df_func.get_df(st, constants.workers_dataframe_key_name)
