@@ -13,8 +13,6 @@ def execute(df_key, table_name, label_name, columns_names, item_key_column_name,
         df = gsheets.load_or_create_the_table(table_name, columns_names)
         df_func.set_df(st=st, key=df_key, new_df=df)
 
-    df = df_func.get_df(st, df_key)
-
     def remove_item(item, index):
         df = df_func.get_df(st, df_key)
         #Remove item from list in data table
