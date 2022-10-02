@@ -4,7 +4,7 @@ import constants
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 
-def execute(df_key, table_name, label_name, columns_names, item_key_column_name, item_key, default_values):
+def execute(df_key, table_name, columns_names, item_key_column_name, item_key, default_values):
     def clear_state(modded):
         # intialize session state data obj
         st.session_state[constants.st_data_key] = {}
@@ -41,13 +41,15 @@ def execute(df_key, table_name, label_name, columns_names, item_key_column_name,
     def add_items():
         data = st.session_state[constants.st_data_key]
         df = df_func.get_df(st, df_key)
-        name = data[constants.workers_name]
+        name = data[item_key]
         # check if name already in table
-        if not df[constants.workers_name].astype("object").str.contains(name).any():
+        if not df[item_key].astype("object").str.contains(name).any():
             #update datatable
             df = df_func.add_row(df, data)
             df_func.set_df(st, df_key, df)
             clear_state(True)
+        else:
+            print("arleady here")
 
     index = 0
     df = df_func.get_df(st, df_key)
