@@ -13,6 +13,9 @@ def execute():
         default_values={constants.worker_is_working:
                             {constants.default_value: False,
                              constants.is_display_column: False},
+                        constants.worker_connection_index:
+                            {constants.default_value: 0,
+                             constants.is_display_column: False},
                         constants.timestamp_str:
                             {constants.is_display_column: False}
                         }
