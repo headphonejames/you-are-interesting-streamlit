@@ -2,6 +2,8 @@ import streamlit as st
 from pandas import DataFrame
 from google.oauth2 import service_account
 from gspread_pandas import Spread,Client
+from lib import df_funcs as df_func
+import constants
 
 # Create a Google Authentication connection object
 scope = ['https://spreadsheets.google.com/feeds',
@@ -60,14 +62,14 @@ def load_or_create_the_table(table_name, columns=None):
         worksheet = sh.worksheet(table_name)
         # intialize empty dataframe
         df = spread.sheet_to_df(index=0, sheet=worksheet)
-        return (worksheet, df)
     except Exception as e:
         print(e)
         # create the dataframe for the table
         df = createDataframe(columns=columns)
         # create the table
         worksheet, df = create_of_update_the_table(dataframe=df, table_name=table_name)
-        return (worksheet, df)
+    df_func.set_session_state_value(st=st, key=constants.workers_dataframe_key_name, value=df)
+    df_func.set_session_state_value(st=st, key=constants.worksheet_key, value=worksheet)
 
 # Update to Sheet
 def create_of_update_the_table(dataframe, table_name):
