@@ -11,7 +11,12 @@ def execute():
         label_name=constants.workers_label_name,
         columns_names=constants.workers_columns_names,
         item_key_column_name=constants.workers_key_column_name,
-        item_key=constants.workers_key)
+        item_key=constants.workers_key,
+        default_values={constants.worker_is_working:
+                            {constants.default_value: False,
+                             constants.is_display_column: False}
+                        }
+    )
     st.button("return to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})
 
 # This code allows you to run the app standalone

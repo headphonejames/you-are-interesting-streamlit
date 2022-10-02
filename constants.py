@@ -10,7 +10,10 @@ workers_table_name = "workers"
 workers_label_name = "workers"
 workers_key_column_name = "name"
 workers_key = "name"
-workers_columns_names = [workers_key_column_name, "contact"]
+worker_is_working = "isworking"
+is_display_column = "is_display_column"
+default_value = "default"
+workers_columns_names = [workers_key_column_name, "contact", worker_is_working]
 workers_dataframe_key_name = "workers_dataframe"
 workers_item_name = "workers"
 

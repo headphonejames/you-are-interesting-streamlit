@@ -1,12 +1,17 @@
 import streamlit as st
+
+import constants
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 
-def execute(df_key, table_name, label_name, columns_names, item_key_column_name, item_key):
+def execute(df_key, table_name, label_name, columns_names, item_key_column_name, item_key, default_values):
     #constants
     if 'modded' not in st.session_state:
         st.session_state.modded = False
-        st.session_state["data"] = {}
+        data = st.session_state["data"] = {}
+        for column_name in columns_names:
+            if column_name in default_values:
+                data[column_name] = default_values[column_name][constants.default_value]
 
     # initialize dataframe
     if df_key not in st.session_state:
@@ -50,7 +55,9 @@ def execute(df_key, table_name, label_name, columns_names, item_key_column_name,
             st.checkbox(item, key="id_{}".format(item),  on_change=remove_item, args=(item, index, ))
 
     for column_name in columns_names:
-        st.text_input(label=column_name, on_change=update_text, key=column_name, args=(column_name,))
+        if not (column_name in default_values
+                and not default_values[column_name][constants.is_display_column]):
+            st.text_input(label=column_name, on_change=update_text, key=column_name, args=(column_name,))
 
     st.button(label="add {}".format(table_name), on_click=add_items)
 
