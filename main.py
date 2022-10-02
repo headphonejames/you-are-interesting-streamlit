@@ -1,9 +1,6 @@
 import streamlit as st
 import constants
-import page_entry
-import page_workers
-import page_select_current_worker
-import page_prompts
+from pagez import page_select_current_worker, page_entry, page_prompts, page_workers
 
 # init current page state
 if constants.CURRENT_PAGE not in st.session_state:
