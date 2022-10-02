@@ -25,7 +25,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
 
     # initialize dataframe
     if df_key not in st.session_state:
-        gsheets.load_or_create_the_table(table_name, columns_names)
+        gsheets.load_or_create_the_table(table_name, df_key, columns_names)
 
     def remove_item(item, index):
         df = df_func.get_session_state_value(st, df_key)
@@ -51,8 +51,6 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
             df = df_func.add_row(df, data)
             df_func.set_session_state_value(st, df_key, df)
             clear_state(True)
-        else:
-            print("arleady here")
 
     index = 0
     df = df_func.get_session_state_value(st, df_key)
@@ -81,4 +79,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
             st.session_state.modded = False
         util.update_current_page(page=constants.ENRTY)
 
-    st.button("return to main", on_click=done)
+    msg = "return to main"
+    if st.session_state.modded:
+        msg = "Commit to db and return to main"
+    st.button(msg, on_click=done)

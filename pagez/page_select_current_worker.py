@@ -23,6 +23,7 @@ def execute():
     # initialize dataframe
     if constants.workers_dataframe_key_name not in st.session_state:
         gsheets.load_or_create_the_table(constants.workers_table_name,
+                                         constants.workers_dataframe_key_name,
                                          constants.workers_config_columns_names)
 
     df = df_func.get_session_state_value(st, constants.workers_dataframe_key_name)

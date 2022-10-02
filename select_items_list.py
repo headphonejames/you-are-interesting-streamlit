@@ -6,7 +6,7 @@ from lib import df_funcs as df_func
 def execute(df_key, table_name, column_name, item_name, session_list_key):
     # initialize dataframe
     if df_key not in st.session_state:
-        gsheets.load_or_create_the_table(table_name, [column_name])
+        gsheets.load_or_create_the_table(table_name, df_key, [column_name])
 
     # init list in session if not exists
     if session_list_key not in st.session_state:

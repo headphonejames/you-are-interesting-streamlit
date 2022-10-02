@@ -40,7 +40,9 @@ worker_shift_column_names = [worker_shift_start, worker_shift_stop]
 
 prompts_table = "prompts"
 prompts_table_name = "prompts"
-prompts_label_name = "prompts"
+prompts_key_column_name = "prompts"
+prompts_key = "prompts"
 prompts_column_name = "prompts"
 prompts_dataframe_key_name = "prompts_dataframe"
 prompts_item_name = "prompts"
+prompts_config_columns_names = [prompts_column_name, timestamp_str]

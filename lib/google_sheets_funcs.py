@@ -57,7 +57,7 @@ def get_worksheet(name):
 
 # Get the sheet as dataframe
 @st.cache(allow_output_mutation=True, ttl = cache_time)
-def load_or_create_the_table(table_name, columns=None):
+def load_or_create_the_table(table_name, df_key_name, columns=None):
     try:
         worksheet = sh.worksheet(table_name)
         # intialize empty dataframe
@@ -68,7 +68,7 @@ def load_or_create_the_table(table_name, columns=None):
         df = createDataframe(columns=columns)
         # create the table
         worksheet, df = create_of_update_the_table(dataframe=df, table_name=table_name)
-    df_func.set_session_state_value(st=st, key=constants.workers_dataframe_key_name, value=df)
+    df_func.set_session_state_value(st=st, key=df_key_name, value=df)
     df_func.set_session_state_value(st=st, key=constants.worksheet_key, value=worksheet)
 
 # Update to Sheet
