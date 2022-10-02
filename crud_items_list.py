@@ -9,7 +9,7 @@ def execute(df_key, table_name, label_name, column_name, item_name):
 
     # initialize dataframe
     if df_key not in st.session_state:
-        df = gsheets.load_or_create_the_table(table_name, [column_name])
+        worksheet, df = gsheets.load_or_create_the_table(table_name, [column_name])
         df_func.set_df(st=st, key=df_key, new_df=df)
 
     def remove_item(item, index):

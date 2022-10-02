@@ -9,16 +9,22 @@ def start_shift(worker_name, index):
     # create worker sheet table if not already exist
 
     # update "isworking" value
-    workers_df = gsheets.load_or_create_the_table(constants.workers_table_name)
+    worksheet, workers_df = gsheets.load_or_create_the_table(constants.workers_table_name)
     workers_df.at[index,constants.worker_is_working]= True
-    gsheets.create_of_update_the_table(workers_df, constants.workers_table_name)
+    # update just those cells in the worksheet
+    column_index = workers_df.columns.get_loc(constants.worker_is_working) + 1
+    # index add 2 (starts at 1, +1  for headers)
+    gsheets.update_cell(worksheet=worksheet,
+                        row=index+2,
+                        column=column_index,
+                        value=True)
     df_func.set_df(st, constants.workers_dataframe_key_name, workers_df)
     # go to waiting_for_friend
 
 def execute():
     # initialize dataframe
     if constants.workers_dataframe_key_name not in st.session_state:
-        df = gsheets.load_or_create_the_table(constants.workers_table_name,
+        worksheet, df = gsheets.load_or_create_the_table(constants.workers_table_name,
                                               constants.workers_config_columns_names)
         df_func.set_df(st, constants.workers_dataframe_key_name, df)
 
