@@ -8,7 +8,7 @@ def execute():
     crud_items_form_input.execute(
         df_key=constants.workers_dataframe_key_name,
         table_name=constants.workers_table_name,
-        columns_names=constants.workers_columns_names,
+        columns_names=constants.workers_config_columns_names,
         item_key_column_name=constants.workers_name,
         item_key=constants.workers_key,
         default_values={constants.worker_is_working:

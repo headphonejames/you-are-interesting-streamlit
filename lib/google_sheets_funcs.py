@@ -55,7 +55,7 @@ def get_worksheet(name):
 
 # Get the sheet as dataframe
 @st.cache(allow_output_mutation=True, ttl = cache_time)
-def load_or_create_the_table(table_name, columns):
+def load_or_create_the_table(table_name, columns=None):
     try:
         worksheet = sh.worksheet(table_name)
         # intialize empty dataframe
