@@ -52,9 +52,10 @@ def get_worksheet(name):
 def load_or_create_the_table(table_name, columns):
     try:
         worksheet = sh.worksheet(table_name)
-        df = Spread.sheet_to_df(sheet=worksheet)
+        df = spread.sheet_to_df(sheet=worksheet)
         return df
-    except:
+    except Exception as e:
+        print(e)
         # create the dataframe for the table
         df = DataFrame([], columns=columns)
         # create the table

@@ -12,15 +12,19 @@ def start_shift(worker, index):
 def execute():
     # initialize dataframe
     if constants.workers_dataframe_key_name not in st.session_state:
-        df = gsheets.load_or_create_the_table(constants.workers_table_name, ["name", "contact"])
+        df = gsheets.load_or_create_the_table(constants.workers_table_name,
+                                              constants.workers_columns_names)
         df_func.set_df(st, constants.workers_dataframe_key_name, df)
 
-    index = 0
     df = df_func.get_df(st, constants.workers_dataframe_key_name)
+    df = df.reset_index()  # make sure indexes pair with number of rows
 
-    if constants.workers_item_name in df:
-        for item in df[constants.workers_item_name]:
-            index = index + 1
-            st.button(item, key="id_{}".format(item), on_click = start_shift, args=(item, index, ))
+    for index, row in df.iterrows():
+        worker_name = row[constants.workers_key_column_name]
+        is_working = util.convert_to_boolean(row[constants.worker_is_working])
+        if not is_working:
+            st.button(worker_name, key="id_{}".format(worker_name),
+                      on_click = start_shift,
+                      args=(worker_name, index, ))
 
     st.button("back to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})
