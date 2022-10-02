@@ -18,10 +18,6 @@ def execute(df_key, table_name, column_name, item_name, session_list_key):
         updated_df = df_func.get_session_state_value(st, df_key)[column_name] = []
         df_func.set_session_state_value(st, df_key, updated_df)
 
-    def clear_state(df):
-        df_func.set_session_state_value(st, df_key, df)
-        st.session_state[column_name] = ''
-
     def toggle_item(item, index):
         list_from_session = st.session_state[session_list_key]
         if not item in list_from_session:
