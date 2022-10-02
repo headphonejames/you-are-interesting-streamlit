@@ -75,7 +75,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
     def done():
         # update sheet
         if st.session_state.modded:
-            gsheets.create_of_update_the_table(df_func.get_session_state_value(st, df_key), table_name)
+            gsheets.create_or_update_the_table(df_func.get_session_state_value(st, df_key), table_name)
             st.session_state.modded = False
         util.update_current_page(page=constants.ENRTY)
 

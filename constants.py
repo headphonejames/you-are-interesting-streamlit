@@ -4,6 +4,7 @@ ENRTY = "entry"
 START_SHIFT = "startshift"
 PROMPTS = "prompts"
 WORKERS = "workers"
+WAITING_FOR_FRIEND = "waiting-for-friend"
 
 workers_table = "workers"
 workers_table_name = "workers"
@@ -19,6 +20,9 @@ workers_dataframe_key_name = "workersDataframe"
 workers_item_name = "workers"
 st_data_key = "data"
 worksheet_key = "worksheet"
+
+worker_timesheet_df_key="timesheet"
+worker_timesheet_column_names=["started","stopped"]
 
 worker_initiated_contact_ts="contactTimeStamp"
 worker_initiated_prompt_ts="promptTimeStamp"
