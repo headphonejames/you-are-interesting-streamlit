@@ -1,9 +1,9 @@
 from pandas import DataFrame
 
-def set_df(st, key, new_df):
+def set_session_state_value(st, key, new_df):
     st.session_state[key] = new_df
 
-def get_df(st, key):
+def get_session_state_value(st, key):
     return st.session_state[key]
 
 

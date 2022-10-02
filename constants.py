@@ -18,6 +18,7 @@ workers_config_columns_names = [workers_name, "contact", worker_is_working, time
 workers_dataframe_key_name = "workersDataframe"
 workers_item_name = "workers"
 st_data_key = "data"
+worksheet_key = "worksheet"
 
 worker_initiated_contact_ts="contactTimeStamp"
 worker_initiated_prompt_ts="promptTimeStamp"

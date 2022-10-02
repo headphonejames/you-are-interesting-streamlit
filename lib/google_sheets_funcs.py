@@ -66,14 +66,14 @@ def load_or_create_the_table(table_name, columns=None):
         # create the dataframe for the table
         df = createDataframe(columns=columns)
         # create the table
-        create_of_update_the_table(dataframe=df, table_name=table_name)
+        worksheet, df = create_of_update_the_table(dataframe=df, table_name=table_name)
         return (worksheet, df)
 
 # Update to Sheet
 def create_of_update_the_table(dataframe, table_name):
-    spread.df_to_sheet(dataframe, sheet = table_name, replace = True, index = False)
+    worksheet = spread.df_to_sheet(dataframe, sheet = table_name, replace = True, index = False)
     # st.sidebar.info('Updated to GoogleSheet')
-    return dataframe
+    return (worksheet, dataframe)
 
 def update_cell(worksheet, row, column, value):
     worksheet.update_cell(row, column, value)

@@ -1,4 +1,5 @@
 import streamlit as st
+import constants
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 
@@ -6,20 +7,21 @@ def execute(df_key, table_name, column_name, item_name, session_list_key):
     # initialize dataframe
     if df_key not in st.session_state:
         worksheet, df = gsheets.load_or_create_the_table(table_name, [column_name])
-        df_func.set_df(st, df_key, df)
+        df_func.set_session_state_value(st, df_key, df)
+        df_func.set_session_state_value(st, constants.worksheet_key, worksheet)
 
     # init list in session if not exists
     if session_list_key not in st.session_state:
         st.session_state[session_list_key] = []
 
     # initialize items list
-    if not column_name in df_func.get_df(st, df_key):
+    if not column_name in df_func.get_session_state_value(st, df_key):
         # add item column to datatable
-        updated_df = df_func.get_df(st, df_key)[column_name] = []
-        df_func.set_df(st, df_key, updated_df)
+        updated_df = df_func.get_session_state_value(st, df_key)[column_name] = []
+        df_func.set_session_state_value(st, df_key, updated_df)
 
     def clear_state(df):
-        df_func.set_df(st, df_key, df)
+        df_func.set_session_state_value(st, df_key, df)
         st.session_state[column_name] = ''
 
     def toggle_item(item, index):
@@ -28,7 +30,7 @@ def execute(df_key, table_name, column_name, item_name, session_list_key):
             list_from_session.append(item)
 
     index = 0
-    df = df_func.get_df(st, df_key)
+    df = df_func.get_session_state_value(st, df_key)
 
     list_from_session = st.session_state[session_list_key]
 

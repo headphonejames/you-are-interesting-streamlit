@@ -25,13 +25,15 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
     # initialize dataframe
     if df_key not in st.session_state:
         worksheet, df = gsheets.load_or_create_the_table(table_name, columns_names)
-        df_func.set_df(st=st, key=df_key, new_df=df)
+        df_func.set_session_state_value(st=st, key=df_key, new_df=df)
+        df_func.set_session_state_value(st, constants.worksheet_key, worksheet)
+
 
     def remove_item(item, index):
-        df = df_func.get_df(st, df_key)
+        df = df_func.get_session_state_value(st, df_key)
         #Remove item from list in data table
         new_df = df_func.remove_col(df, index)
-        df_func.set_df(st, df_key, new_df)
+        df_func.set_session_state_value(st, df_key, new_df)
         st.session_state.modded = True
         # set_df(st, df_func.remove_col(df_func.get_df(st, df_key), index))
 
@@ -41,7 +43,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
 
     def add_items():
         data = st.session_state[constants.st_data_key]
-        df = df_func.get_df(st, df_key)
+        df = df_func.get_session_state_value(st, df_key)
         name = data[item_key]
         # check if name already in table
         if not df[item_key].astype("object").str.contains(name).any():
@@ -49,13 +51,13 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
             data[constants.timestamp_str] = datetime.datetime.now()
             #update datatable
             df = df_func.add_row(df, data)
-            df_func.set_df(st, df_key, df)
+            df_func.set_session_state_value(st, df_key, df)
             clear_state(True)
         else:
             print("arleady here")
 
     index = 0
-    df = df_func.get_df(st, df_key)
+    df = df_func.get_session_state_value(st, df_key)
 
     if item_key_column_name in df:
         for item in df[item_key_column_name]:
@@ -73,7 +75,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
 
     def commit_to_db():
         # update sheet
-        gsheets.create_of_update_the_table(df_func.get_df(st, df_key), table_name)
+        gsheets.create_of_update_the_table(df_func.get_session_state_value(st, df_key), table_name)
         st.session_state.modded = False
 
     st.button("commit to db", on_click=commit_to_db, disabled=(not st.session_state.modded))

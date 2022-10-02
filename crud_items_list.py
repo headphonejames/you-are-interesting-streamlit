@@ -1,6 +1,7 @@
 import streamlit as st
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
+import constants
 
 def execute(df_key, table_name, label_name, column_name, item_name):
     #constants
@@ -10,23 +11,24 @@ def execute(df_key, table_name, label_name, column_name, item_name):
     # initialize dataframe
     if df_key not in st.session_state:
         worksheet, df = gsheets.load_or_create_the_table(table_name, [column_name])
-        df_func.set_df(st=st, key=df_key, new_df=df)
+        df_func.set_session_state_value(st=st, key=df_key, new_df=df)
+        df_func.set_session_state_value(st, constants.worksheet_key, worksheet)
 
     def remove_item(item, index):
-        df = df_func.get_df(st, df_key)
+        df = df_func.get_session_state_value(st, df_key)
         #Remove item from list in data table
         new_df = df_func.remove_col(df, index)
-        df_func.set_df(st, df_key, new_df)
+        df_func.set_session_state_value(st, df_key, new_df)
         st.session_state.modded = True
         # set_df(st, df_func.remove_col(df_func.get_df(st, df_key), index))
 
     def clear_state(df):
-        df_func.set_df(st, df_key, df)
+        df_func.set_session_state_value(st, df_key, df)
         st.session_state[column_name] = ''
         st.session_state.modded = True
 
     def add_item():
-        df = df_func.get_df(st, df_key)
+        df = df_func.get_session_state_value(st, df_key)
         item = st.session_state[column_name]
         # check if items already exists
         if not item in df[column_name].tolist():
@@ -35,7 +37,7 @@ def execute(df_key, table_name, label_name, column_name, item_name):
             clear_state(df)
 
     index = 0
-    df = df_func.get_df(st, df_key)
+    df = df_func.get_session_state_value(st, df_key)
 
     if item_name in df:
         for item in df[item_name]:
@@ -47,7 +49,7 @@ def execute(df_key, table_name, label_name, column_name, item_name):
 
     def done():
         # update sheet
-        gsheets.create_of_update_the_table(df_func.get_df(st, df_key), table_name)
+        gsheets.create_of_update_the_table(df_func.get_session_state_value(st, df_key), table_name)
         st.session_state.modded = False
 
     st.button("commit to db", on_click=done, disabled=(not st.session_state.modded))
