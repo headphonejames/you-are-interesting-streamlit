@@ -39,6 +39,12 @@ credentials = service_account.Credentials.from_service_account_info(
 
 spread, client, sh = get_spread(credentials)
 
+def createDataframe(columns):
+    df = DataFrame(columns = columns)
+    # index = columns[0]
+    # df.set_index(index)
+    return df
+
 @st.cache(ttl = cache_time)
 def get_worksheet_list():
     return get_worksheets(sh)
@@ -52,12 +58,13 @@ def get_worksheet(name):
 def load_or_create_the_table(table_name, columns):
     try:
         worksheet = sh.worksheet(table_name)
-        df = spread.sheet_to_df(sheet=worksheet)
+        # intialize empty dataframe
+        df = spread.sheet_to_df(index=0, sheet=worksheet)
         return df
     except Exception as e:
         print(e)
         # create the dataframe for the table
-        df = DataFrame([], columns=columns)
+        df = createDataframe(columns=columns)
         # create the table
         create_of_update_the_table(dataframe=df, table_name=table_name)
         return df

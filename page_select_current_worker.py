@@ -17,11 +17,16 @@ def execute():
         df_func.set_df(st, constants.workers_dataframe_key_name, df)
 
     df = df_func.get_df(st, constants.workers_dataframe_key_name)
-    df = df.reset_index()  # make sure indexes pair with number of rows
+    st.write(df)
 
     for index, row in df.iterrows():
-        worker_name = row[constants.workers_key_column_name]
-        is_working = util.convert_to_boolean(row[constants.worker_is_working])
+        print(row)
+        st.write(row)
+        worker_name = row[constants.workers_name]
+        is_working_str = row[constants.worker_is_working]
+        print(is_working_str)
+        is_working = util.convert_to_boolean(value=is_working_str)
+        print(is_working)
         if not is_working:
             st.button(worker_name, key="id_{}".format(worker_name),
                       on_click = start_shift,

@@ -5,13 +5,21 @@ from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 
 def execute(df_key, table_name, label_name, columns_names, item_key_column_name, item_key, default_values):
-    #constants
-    if 'modded' not in st.session_state:
-        st.session_state.modded = False
-        data = st.session_state["data"] = {}
+    def clear_state(modded):
+        # intialize session state data obj
+        st.session_state[constants.st_data_key] = {}
+        # pre-fill sessions state data obj with any default values
         for column_name in columns_names:
             if column_name in default_values:
-                data[column_name] = default_values[column_name][constants.default_value]
+                st.session_state[constants.st_data_key][column_name] = default_values[column_name][constants.default_value]
+            else:
+                # just set as empty
+                st.session_state[column_name] = ''
+        st.session_state.modded = modded
+
+    #constants
+    if 'modded' not in st.session_state:
+        clear_state(False)
 
     # initialize dataframe
     if df_key not in st.session_state:
@@ -26,25 +34,20 @@ def execute(df_key, table_name, label_name, columns_names, item_key_column_name,
         st.session_state.modded = True
         # set_df(st, df_func.remove_col(df_func.get_df(st, df_key), index))
 
-    def clear_state(df):
-        df_func.set_df(st, df_key, df)
-        for column_name in columns_names:
-            st.session_state[column_name] = ''
-        st.session_state.modded = True
-
     def update_text(column_name):
         text_input = st.session_state[column_name]
-        st.session_state["data"][column_name] = text_input
+        st.session_state[constants.st_data_key][column_name] = text_input
 
     def add_items():
-        data = st.session_state["data"]
+        data = st.session_state[constants.st_data_key]
         df = df_func.get_df(st, df_key)
-        item_key_data = data[columns_names[0]]
-        # check if items already exists
-        if not item_key_data in df[columns_names[0]].tolist():
+        name = data[constants.workers_name]
+        # check if name already in table
+        if not df[constants.workers_name].astype("object").str.contains(name).any():
             #update datatable
             df = df_func.add_row(df, data)
-            clear_state(df)
+            df_func.set_df(st, df_key, df)
+            clear_state(True)
 
     index = 0
     df = df_func.get_df(st, df_key)
@@ -57,7 +60,7 @@ def execute(df_key, table_name, label_name, columns_names, item_key_column_name,
     for column_name in columns_names:
         if not (column_name in default_values
                 and not default_values[column_name][constants.is_display_column]):
-            st.text_input(label=column_name, on_change=update_text, key=column_name, args=(column_name,))
+            st.text_input(label=column_name, value=st.session_state[column_name], on_change=update_text, key=column_name, args=(column_name,))
 
     st.button(label="add {}".format(table_name), on_click=add_items)
 
