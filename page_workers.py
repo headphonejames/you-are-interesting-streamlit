@@ -13,7 +13,9 @@ def execute():
         item_key=constants.workers_key,
         default_values={constants.worker_is_working:
                             {constants.default_value: False,
-                             constants.is_display_column: False}
+                             constants.is_display_column: False},
+                        constants.timestamp_str:
+                            {constants.is_display_column: False}
                         }
     )
     st.button("return to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})
