@@ -4,6 +4,7 @@ import constants
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 import datetime
+import util
 
 def execute(df_key, table_name, columns_names, item_key_column_name, item_key, default_values):
     def clear_state(modded):
@@ -73,9 +74,11 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
 
     st.button(label="add {}".format(table_name), on_click=add_items)
 
-    def commit_to_db():
+    def done():
         # update sheet
-        gsheets.create_of_update_the_table(df_func.get_session_state_value(st, df_key), table_name)
-        st.session_state.modded = False
+        if st.session_state.modded:
+            gsheets.create_of_update_the_table(df_func.get_session_state_value(st, df_key), table_name)
+            st.session_state.modded = False
+        util.update_current_page(page=constants.ENRTY)
 
-    st.button("commit to db", on_click=commit_to_db, disabled=(not st.session_state.modded))
+    st.button("return to main", on_click=done)

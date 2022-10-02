@@ -18,7 +18,6 @@ def execute():
                             {constants.is_display_column: False}
                         }
     )
-    st.button("return to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})
 
 # This code allows you to run the app standalone
 # as well as part of a library of apps
