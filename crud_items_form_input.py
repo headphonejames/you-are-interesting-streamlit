@@ -66,7 +66,10 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
             if default_values[column_name][constants.is_display_column]:
                 st.text_input(label=column_name, value=st.session_state[column_name], on_change=update_text, key=column_name, args=(column_name,))
         else:
-            st.text_input(label=column_name, value=st.session_state[column_name], on_change=update_text, key=column_name, args=(column_name,))
+            value = ''
+            if column_name in st.session_state:
+                value = st.session_state[column_name]
+            st.text_input(label=column_name, value=value, on_change=update_text, key=column_name, args=(column_name,))
 
     st.button(label="add {}".format(table_name), on_click=add_items)
 
