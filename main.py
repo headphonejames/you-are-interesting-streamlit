@@ -1,7 +1,7 @@
 import streamlit as st
 import constants
 from pagez import page_select_current_worker, page_entry, page_prompts, \
-    page_workers, page_waiting_for_friend, page_connection_completed, page_connecting
+    page_manage_worker_list, page_waiting_for_friend, page_connection_completed, page_connecting
 
 # init current page state
 if constants.CURRENT_PAGE not in st.session_state:
@@ -12,7 +12,7 @@ current_page = st.session_state[constants.CURRENT_PAGE]
 if current_page == constants.ENRTY:
     page_entry.execute()
 elif current_page == constants.WORKERS:
-    page_workers.execute()
+    page_manage_worker_list.execute()
 elif current_page == constants.PROMPTS:
     page_prompts.execute()
 elif current_page == constants.START_SHIFT:

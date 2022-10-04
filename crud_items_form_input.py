@@ -25,7 +25,10 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
 
     # initialize dataframe
     if df_key not in st.session_state:
-        gsheets.load_or_create_the_table(table_name, df_key, columns_names)
+        gsheets.load_or_create_the_table(st=st,
+                                         table_name=table_name,
+                                         df_key_name=df_key,
+                                         columns=columns_names)
 
     def remove_item(item, index):
         df = df_func.get_session_state_value(st, df_key)

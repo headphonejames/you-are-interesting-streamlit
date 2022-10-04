@@ -15,15 +15,25 @@ worker_is_working = "isWorking"
 is_display_column = "isDisplayColumn"
 default_value = "default"
 timestamp_str = "timeStamp"
+worker_contact = "contact"
 worker_connection_index = "connectionIndex"
-workers_config_columns_names = [workers_name, "contact", worker_is_working, worker_connection_index, timestamp_str]
-workers_dataframe_key_name = "workersDataframe"
+worker_timesheet_index = "timesheetIndex"
+workers_config_columns_names = [workers_name,
+                                worker_contact,
+                                worker_is_working,
+                                worker_connection_index,
+                                worker_timesheet_index,
+                                timestamp_str]
+workers_df_key = "workers-df"
 workers_item_name = "workers"
 st_data_key = "data"
-worksheet_key = "worksheet"
+worksheets_df_key = "worksheets"
 
 worker_timesheet_df_key="timesheet"
-worker_timesheet_column_names=["started","stopped"]
+worker_shift_start="start"
+worker_shift_stop="stop"
+worker_shift_column_names = [worker_shift_start, worker_shift_stop]
+worker_index = "worker_index"
 
 worker_initiated_contact_ts="contactTimeStamp"
 worker_initiated_prompt_ts="promptTimeStamp"
@@ -39,9 +49,6 @@ worker_column_names = [worker_initiated_contact_ts,
                        worker_prompt_choice
                        ]
 
-worker_shift_start="workerShiftStartTimeStamp"
-worker_shift_stop="workerShiftStopTimeStamp"
-worker_shift_column_names = [worker_shift_start, worker_shift_stop]
 
 prompts_table = "prompts"
 prompts_table_name = "prompts"

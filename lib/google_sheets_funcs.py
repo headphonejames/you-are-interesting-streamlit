@@ -2,6 +2,8 @@ import streamlit as st
 from pandas import DataFrame
 from google.oauth2 import service_account
 from gspread_pandas import Spread,Client
+
+import util
 from lib import df_funcs as df_func
 import constants
 
@@ -57,28 +59,42 @@ def get_worksheet(name):
 
 # Get the sheet as dataframe
 @st.cache(allow_output_mutation=True, ttl = cache_time)
-def load_or_create_the_table(table_name, df_key_name, columns=None):
+def load_or_create_the_table(st, table_name, df_key_name, columns=None):
     try:
         worksheet = sh.worksheet(table_name)
-        # intialize empty dataframe
         df = spread.sheet_to_df(index=0, sheet=worksheet)
     except Exception as e:
-        print(e)
         # create the dataframe for the table
         df = createDataframe(columns=columns)
         # create the table
-        worksheet, df = create_or_update_the_table(dataframe=df, table_name=table_name)
+        df = create_or_update_the_table(dataframe=df, table_name=table_name)
+        worksheet = sh.worksheet(table_name)
+
     df_func.set_session_state_value(st=st, key=df_key_name, value=df)
-    df_func.set_session_state_value(st=st, key=constants.worksheet_key, value=worksheet)
+    # stash specific worksheet in cache, create the worksheet obj if not exist
+    worksheets = df_func.get_session_state_value(st=st, key=constants.worksheets_df_key, initValue={})
+    worksheets[df_key_name] = worksheet
+    df_func.set_session_state_value(st=st, key=constants.worksheets_df_key, value=worksheets)
 
 # Update to Sheet
 def create_or_update_the_table(dataframe, table_name):
-    worksheet = spread.df_to_sheet(dataframe, sheet = table_name, replace = True, index = False)
+    spread.df_to_sheet(dataframe, sheet = table_name, replace = True, index = False)
     # st.sidebar.info('Updated to GoogleSheet')
-    return (worksheet, dataframe)
+    return dataframe
 
 def update_cell(worksheet, row, column, value):
     worksheet.update_cell(row, column, value)
 
-def insert_row(worksheet, row, column, value):
-    worksheet.update_cell(row, column, value)
+def update_cells(worksheet, row, columns, values):
+    str = None
+    for column in columns:
+        column_name = util.get_column_google_name(column)
+        if not str:
+            str = "{}{}".format(column_name, row)
+        else:
+            str = str + ":" + "{}{}".format(column_name,row)
+    print(str)
+    worksheet.update(str, values)
+
+def insert_row(worksheet, column_values):
+    worksheet.append_row(column_values)
