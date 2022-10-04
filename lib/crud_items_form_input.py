@@ -4,7 +4,7 @@ import constants
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 import datetime
-import util
+import lib.util as util
 
 def execute(df_key, table_name, columns_names, item_key_column_name, item_key, default_values):
     def clear_state(modded):
@@ -17,10 +17,9 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
             else:
                 # just set as empty
                 st.session_state[column_name] = ''
-        st.session_state.modded = modded
+        st.session_state[constants.modded_key] = modded
 
-    #constants
-    if 'modded' not in st.session_state:
+    if constants.modded_key not in st.session_state:
         clear_state(False)
 
     # initialize dataframe
@@ -31,11 +30,11 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
                                          columns=columns_names)
 
     def remove_item(item, index):
-        df = df_func.get_session_state_value(st, df_key)
+        df = util.get_session_state_value(st, df_key)
         #Remove item from list in data table
         new_df = df_func.remove_col(df, index)
-        df_func.set_session_state_value(st, df_key, new_df)
-        st.session_state.modded = True
+        util.set_session_state_value(st, df_key, new_df)
+        st.session_state[constants.modded_key] = True
         # set_df(st, df_func.remove_col(df_func.get_df(st, df_key), index))
 
     def update_text(column_name):
@@ -44,7 +43,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
 
     def add_items():
         data = st.session_state[constants.st_data_key]
-        df = df_func.get_session_state_value(st, df_key)
+        df = util.get_session_state_value(st, df_key)
         name = data[item_key]
         # check if name already in table
         if not df[item_key].astype("object").str.contains(name).any():
@@ -52,11 +51,11 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
             data[constants.timestamp_str] = datetime.datetime.now()
             #update datatable
             df = df_func.add_row(df, data)
-            df_func.set_session_state_value(st, df_key, df)
+            util.set_session_state_value(st, df_key, df)
             clear_state(True)
 
     index = 0
-    df = df_func.get_session_state_value(st, df_key)
+    df = util.get_session_state_value(st, df_key)
 
     if item_key_column_name in df:
         for item in df[item_key_column_name]:
@@ -75,14 +74,15 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
 
     st.button(label="add {}".format(table_name), on_click=add_items)
 
-    def done():
+    def done(commit=False):
         # update sheet
-        if st.session_state.modded:
-            gsheets.create_or_update_the_table(df_func.get_session_state_value(st, df_key), table_name)
-            st.session_state.modded = False
+        if st.session_state[constants.modded_key]:
+            if commit:
+                gsheets.create_or_update_the_table(util.get_session_state_value(st, df_key), table_name)
+            st.session_state[constants.modded_key] = False
         util.update_current_page(page=constants.ENRTY)
 
-    msg = "return to main"
-    if st.session_state.modded:
-        msg = "Commit to db and return to main"
-    st.button(msg, on_click=done)
+    if st.session_state[constants.modded_key]:
+        st.button("Commit to db and return to main", on_click=done, args=(True, ))
+    st.button("return to main", on_click=done, args=(False, ))
+

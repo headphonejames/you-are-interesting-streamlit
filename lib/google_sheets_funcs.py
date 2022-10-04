@@ -3,9 +3,10 @@ from pandas import DataFrame
 from google.oauth2 import service_account
 from gspread_pandas import Spread,Client
 
-import util
+import lib.util as util
 from lib import df_funcs as df_func
 import constants
+import traceback
 
 # Create a Google Authentication connection object
 scope = ['https://spreadsheets.google.com/feeds',
@@ -64,17 +65,21 @@ def load_or_create_the_table(st, table_name, df_key_name, columns=None):
         worksheet = sh.worksheet(table_name)
         df = spread.sheet_to_df(index=0, sheet=worksheet)
     except Exception as e:
+        print("Exception thrown")
+        print(e)
+        tb = traceback.format_exc()
+        print(tb)
         # create the dataframe for the table
         df = createDataframe(columns=columns)
         # create the table
         df = create_or_update_the_table(dataframe=df, table_name=table_name)
         worksheet = sh.worksheet(table_name)
 
-    df_func.set_session_state_value(st=st, key=df_key_name, value=df)
+    util.set_session_state_value(st=st, key=df_key_name, value=df)
     # stash specific worksheet in cache, create the worksheet obj if not exist
-    worksheets = df_func.get_session_state_value(st=st, key=constants.worksheets_df_key, initValue={})
+    worksheets = util.get_session_state_value(st=st, key=constants.worksheets_df_key, initValue={})
     worksheets[df_key_name] = worksheet
-    df_func.set_session_state_value(st=st, key=constants.worksheets_df_key, value=worksheets)
+    util.set_session_state_value(st=st, key=constants.worksheets_df_key, value=worksheets)
 
 # Update to Sheet
 def create_or_update_the_table(dataframe, table_name):

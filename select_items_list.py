@@ -1,7 +1,6 @@
 import streamlit as st
-import constants
 from lib import google_sheets_funcs as gsheets
-from lib import df_funcs as df_func
+from lib import util as util
 
 def execute(df_key, table_name, column_name, item_name, session_list_key):
     # initialize dataframe
@@ -16,10 +15,10 @@ def execute(df_key, table_name, column_name, item_name, session_list_key):
         st.session_state[session_list_key] = []
 
     # initialize items list
-    if not column_name in df_func.get_session_state_value(st, df_key):
+    if not column_name in util.get_session_state_value(st, df_key):
         # add item column to datatable
-        updated_df = df_func.get_session_state_value(st, df_key)[column_name] = []
-        df_func.set_session_state_value(st, df_key, updated_df)
+        updated_df = util.get_session_state_value(st, df_key)[column_name] = []
+        util.set_session_state_value(st, df_key, updated_df)
 
     def toggle_item(item, index):
         list_from_session = st.session_state[session_list_key]
@@ -27,7 +26,7 @@ def execute(df_key, table_name, column_name, item_name, session_list_key):
             list_from_session.append(item)
 
     index = 0
-    df = df_func.get_session_state_value(st, df_key)
+    df = util.get_session_state_value(st, df_key)
 
     list_from_session = st.session_state[session_list_key]
 

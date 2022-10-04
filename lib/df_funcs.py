@@ -1,18 +1,5 @@
 from pandas import DataFrame
 
-def set_session_state_value(st, key, value):
-    st.session_state[key] = value
-
-def get_session_state_value(st, key, initValue=None):
-    if key in st.session_state:
-        return st.session_state[key]
-    else:
-        if initValue:
-            st.session_state[key] = initValue
-        return initValue
-    # otherwise force the exception
-    return st.session_state[key]
-
 def remove_col(df, index):
     return df.drop(df.index[index - 1]).reset_index(drop=True)
 

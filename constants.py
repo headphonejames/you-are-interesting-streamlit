@@ -6,6 +6,9 @@ PROMPTS = "prompts"
 WORKERS = "workers"
 WAITING_FOR_FRIEND = "waiting-for-friend"
 
+
+modded_key = "modded"
+
 workers_table = "workers"
 workers_table_name = "workers"
 workers_label_name = "workers"

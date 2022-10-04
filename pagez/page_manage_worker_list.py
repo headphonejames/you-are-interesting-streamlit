@@ -1,6 +1,6 @@
 import streamlit as st
 import constants
-import crud_items_form_input
+import lib.crud_items_form_input as crud_items_form_input
 
 def execute():
     st.title("Names of staff")
