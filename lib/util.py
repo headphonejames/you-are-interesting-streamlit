@@ -9,6 +9,7 @@ def set_session_state_value(st, key, value):
 def get_session_state_value(st, key, initValue=None):
     print("get_session_state_value: {} {}".format(key, initValue))
     if key in st.session_state:
+        print("found {}".format(st.session_state[key]))
         return st.session_state[key]
     else:
         if initValue:
@@ -16,7 +17,7 @@ def get_session_state_value(st, key, initValue=None):
             st.session_state[key] = initValue
         return initValue
     # otherwise force the exception
-    return st.session_state[key]
+    raise Exception("AAAAAAA")
 
 def update_current_page(page):
     st.session_state[constants.CURRENT_PAGE] = page

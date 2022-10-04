@@ -53,6 +53,9 @@ def start_shift(worker_name, worker_timesheet_index, worker_sheet_index):
     # go to waiting_for_friend
     util.update_current_page(constants.WAITING_FOR_FRIEND)
 
+    #TODO create table if necessary to start shift
+
+
 def execute():
     # initialize dataframe
     if constants.workers_df_key not in st.session_state:

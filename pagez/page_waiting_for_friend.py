@@ -2,12 +2,9 @@ import streamlit as st
 import lib.util as util
 import constants
 from lib import google_sheets_funcs as gsheets
-from lib import df_funcs as df_func
 import datetime
 
 def execute():
-    # create table if necessary to start shift
-    # create table if track interactions
     def finish_shift():
         # get worker name
         worker_name = util.get_session_state_value(st, constants.workers_name)
