@@ -17,7 +17,7 @@ xls_name = "initial you are interesting"
 cache_time = 10
 
 # Functions
-@st.cache(ttl = cache_time)
+# @st.cache(ttl = cache_time)
 # Get our worksheet names
 def get_worksheet_names(worksheet_list):
     sheet_names = []
@@ -26,14 +26,14 @@ def get_worksheet_names(worksheet_list):
     return sheet_names
 
 
-@st.cache(allow_output_mutation=True)
+# @st.cache(allow_output_mutation=True)
 def get_spread(credentials):
     client = Client(scope=scope,creds=credentials)
     spread = Spread(xls_name, client = client)
     sh = client.open(xls_name)
     return spread, client, sh
 
-@st.cache(ttl = cache_time)
+# @st.cache(ttl = cache_time)
 def get_worksheets(sh):
     # Check whether the sheets exists
     return sh.worksheets()
@@ -50,16 +50,16 @@ def createDataframe(columns):
     # df.set_index(index)
     return df
 
-@st.cache(ttl = cache_time)
+# @st.cache(ttl = cache_time)
 def get_worksheet_list():
     return get_worksheets(sh)
 
-@st.cache(ttl = cache_time)
+# @st.cache(ttl = cache_time)
 def get_worksheet(name):
     return get_worksheet_list()[name]
 
 # Get the sheet as dataframe
-@st.cache(allow_output_mutation=True, ttl = cache_time)
+# @st.cache(allow_output_mutation=True, ttl = cache_time)
 def load_or_create_the_table(st, table_name, df_key_name, columns=None):
     try:
         worksheet = sh.worksheet(table_name)
