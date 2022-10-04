@@ -7,7 +7,7 @@ import datetime
 def execute():
     def finish_shift():
         # get worker name
-        worker_name = util.get_session_state_value(st, constants.workers_name)
+        worker_name = util.get_session_state_value(st, constants.workers_name_cached)
         # get the index in the timesheet to update
         worker_timesheet_index = util.get_session_state_value(st, constants.worker_timesheet_index)
 
@@ -68,11 +68,7 @@ def execute():
 
 
     st.write("Waiting for friend")
-    worker_name = util.get_session_state_value(st, constants.workers_name)
+    worker_name = util.get_session_state_value(st, constants.workers_name_cached)
     st.write("worker_name {}".format(worker_name))
-
-    st.write(st.session_state)
-    df = util.get_session_state_value(st, constants.workers_df_key)
-    st.write(df)
     st.button("Contact initiated")
     st.button("Finish shift", key="finished", on_click = finish_shift)

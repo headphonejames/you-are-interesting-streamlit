@@ -10,7 +10,7 @@ def start_shift(worker_name, worker_timesheet_index, worker_sheet_index):
     workers_df = util.get_session_state_value(st, constants.workers_df_key)
 
     #cache worker name
-    util.set_session_state_value(st, constants.workers_name, worker_name)
+    util.set_session_state_value(st, constants.workers_name_cached, worker_name)
 
     #cache current worker timesheet index
     util.set_session_state_value(st, constants.worker_timesheet_index, worker_timesheet_index)
@@ -64,7 +64,6 @@ def execute():
                                          df_key_name=constants.workers_df_key,
                                          columns=constants.workers_config_columns_names)
     df = util.get_session_state_value(st, constants.workers_df_key)
-    st.write(df)
     for index, row in df.iterrows():
         worker_name = row[constants.workers_name]
         worker_timesheet_index = row[constants.worker_timesheet_index]
