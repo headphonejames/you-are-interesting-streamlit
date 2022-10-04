@@ -9,6 +9,7 @@ watchdog = "*"
 pandas = "*"
 gspread = "*"
 gspread-pandas = "*"
+xlsxwriter = "*"
 
 [dev-packages]
 
