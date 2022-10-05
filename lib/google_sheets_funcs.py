@@ -92,6 +92,9 @@ def create_or_update_the_table(dataframe, table_name):
 def update_cell(worksheet, row, column, value):
     worksheet.update_cell(row, column, value)
 
+def append_row(worksheet, values):
+    worksheet.append_row(values)
+
 def update_cells(worksheet, row, columns, values):
     str = None
     for column in columns:

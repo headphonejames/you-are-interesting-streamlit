@@ -5,7 +5,7 @@ from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 import datetime
 
-def start_shift(worker_name, worker_timesheet_index, worker_sheet_index):
+def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sheet_index):
     # get worker data
     workers_df = util.get_session_state_value(st, constants.workers_df_key)
 
@@ -14,6 +14,9 @@ def start_shift(worker_name, worker_timesheet_index, worker_sheet_index):
 
     #cache current worker timesheet index
     util.set_session_state_value(st, constants.worker_timesheet_index, worker_timesheet_index)
+
+    #cachec current worker log index
+    util.set_session_state_value(st, constants.worker_log_index, worker_log_index)
 
     # get worksheet for workers
     worksheets = util.get_session_state_value(st, constants.worksheets_df_key)
@@ -78,10 +81,12 @@ def execute():
     for index, row in df.iterrows():
         worker_name = row[constants.workers_name]
         worker_timesheet_index = row[constants.worker_timesheet_index]
+        worker_log_index = row[constants.worker_log_index]
         is_working =  util.convert_to_boolean(row[constants.worker_is_working])
         if not is_working:
             st.button(worker_name, key="id_{}".format(worker_name),
                       on_click = start_shift,
-                      args=(worker_name, int(worker_timesheet_index), index, ))
+                      args=(worker_name, int(worker_timesheet_index),
+                            int(worker_log_index), index, ))
 
     st.button("back to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})

@@ -58,9 +58,29 @@ def execute():
         # go to entry page
         util.update_current_page(constants.ENRTY)
 
+    def begin_contact():
+        #update value in log
+        # get worker name
+        worker_name = util.get_session_state_value(st, constants.workers_name_cached)
+        # get the index in the log to update
+        worker_log_index = util.get_session_state_value(st, constants.worker_log_index)
+
+        # get log worksheet
+        log_worksheet_df_key = util.get_worker_log_df_key(worker_name)
+        worksheets = util.get_session_state_value(st, constants.worksheets_df_key)
+        log_worksheet = worksheets[log_worksheet_df_key]
+
+        # get column for setting the stop time for the shift
+        columns = [str(datetime.datetime.now()), "", "", "", 0, ""]
+
+        # create a timestamp in that column
+        gsheets.append_row(worksheet=log_worksheet,
+                           values=columns)
+
+        util.update_current_page(constants.CONTACT)
 
     st.write("Waiting for friend")
     worker_name = util.get_session_state_value(st, constants.workers_name_cached)
     st.write("worker_name {}".format(worker_name))
-    st.button("Contact initiated")
+    st.button("Contact initiated", on_click = begin_contact)
     st.button("Finish shift", key="finished", on_click = finish_shift)

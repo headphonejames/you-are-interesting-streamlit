@@ -5,7 +5,9 @@ START_SHIFT = "startshift"
 PROMPTS = "prompts"
 WORKERS = "workers"
 WAITING_FOR_FRIEND = "waiting-for-friend"
-
+CONTACT = "contact"
+SELECT_PROMPT = "select-prompt"
+COMPLETE = "complete"
 
 modded_key = "modded"
 
@@ -20,12 +22,13 @@ is_display_column = "isDisplayColumn"
 default_value = "default"
 timestamp_str = "timeStamp"
 worker_contact = "contact"
-worker_connection_index = "connectionIndex"
+
+worker_log_index = "logIndex"
 worker_timesheet_index = "timesheetIndex"
 workers_config_columns_names = [workers_name,
                                 worker_contact,
                                 worker_is_working,
-                                worker_connection_index,
+                                worker_log_index,
                                 worker_timesheet_index,
                                 timestamp_str]
 workers_df_key = "workers-df"
@@ -39,7 +42,6 @@ worker_shift_stop="stop"
 worker_shift_column_names = [worker_shift_start, worker_shift_stop]
 worker_index = "worker_index"
 
-worker_log_index = "logIndex"
 worker_log_df_key="log"
 worker_log_time_contact="timeContact"
 worker_log_time_prompt="timePrompt"
