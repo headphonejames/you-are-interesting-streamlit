@@ -26,13 +26,6 @@ def execute():
                     value=str(datetime.datetime.now()))
 
         # change isWorking to false and update timesheet index
-
-        # initialize dataframe if not there
-        if constants.workers_df_key not in st.session_state:
-            gsheets.load_or_create_the_table(st=st,
-                                             table_name=constants.workers_table_name,
-                                             df_key_name=constants.workers_df_key,
-                                             columns=constants.worker_column_names)
         # get worker data
         workers_df = util.get_session_state_value(st, constants.workers_df_key)
 

@@ -50,10 +50,21 @@ def start_shift(worker_name, worker_timesheet_index, worker_sheet_index):
 
     # cache the worker's worker sheet index
     util.set_session_state_value(st, constants.worker_index, worker_sheet_index)
+
+    # initialize dataframe for worker log
+    worker_log_df_key = util.get_worker_log_df_key(worker_name)
+    worker_log_table = util.get_worker_log_table_name(worker_name)
+    # create worker log if not exists, otherwise load it
+    if worker_log_df_key not in st.session_state:
+        gsheets.load_or_create_the_table(st=st,
+                                         table_name=worker_log_table,
+                                         df_key_name=worker_log_df_key,
+                                         columns=constants.worker_log_column_names)
+
+
     # go to waiting_for_friend
     util.update_current_page(constants.WAITING_FOR_FRIEND)
 
-    #TODO create table if necessary to start shift
 
 
 def execute():

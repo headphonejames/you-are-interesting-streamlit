@@ -39,20 +39,20 @@ worker_shift_stop="stop"
 worker_shift_column_names = [worker_shift_start, worker_shift_stop]
 worker_index = "worker_index"
 
-worker_initiated_contact_ts="contactTimeStamp"
-worker_initiated_prompt_ts="promptTimeStamp"
-worker_finished_interation_ts="finishedTimeStamp"
-worker_convo_ranking="converstaionQuality"
-worker_convo_notes="notes"
-worker_prompt_choice="prompt"
-worker_column_names = [worker_initiated_contact_ts,
-                       worker_initiated_prompt_ts,
-                       worker_finished_interation_ts,
-                       worker_convo_ranking,
-                       worker_convo_notes,
-                       worker_prompt_choice
-                       ]
-
+worker_log_index = "logIndex"
+worker_log_df_key="log"
+worker_log_time_contact="timeContact"
+worker_log_time_prompt="timePrompt"
+worker_log_time_finished="timeFinished"
+worker_log_prompt="prompt"
+worker_log_rating="rating"
+worker_log_notes="notes"
+worker_log_column_names = [worker_log_time_contact,
+                           worker_log_time_prompt,
+                           worker_log_time_finished,
+                           worker_log_prompt,
+                           worker_log_rating,
+                           worker_log_notes]
 
 prompts_table = "prompts"
 prompts_table_name = "prompts"

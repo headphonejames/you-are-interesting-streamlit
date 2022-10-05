@@ -33,5 +33,12 @@ def get_worker_timesheet_table_name(worker_name):
 def get_worker_timesheet_df_key(worker_name):
     return worker_name + constants.worker_timesheet_df_key
 
+def get_worker_log_table_name(worker_name):
+    return worker_name + "-" + constants.worker_log_df_key
+
+def get_worker_log_df_key(worker_name):
+    return worker_name + constants.worker_log_df_key
+
+
 def get_column_google_name(column_index):
     return xlsxwriter.utility.xl_col_to_name(column_index)
