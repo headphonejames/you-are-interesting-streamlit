@@ -1,6 +1,6 @@
 from pandas import DataFrame
 
-def remove_col(df, index):
+def remove_row(df, index):
     return df.drop(df.index[index - 1]).reset_index(drop=True)
 
 def add_row(df, row_data):

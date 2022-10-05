@@ -32,7 +32,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
     def remove_item(item, index):
         df = util.get_session_state_value(st, df_key)
         #Remove item from list in data table
-        new_df = df_func.remove_col(df, index)
+        new_df = df_func.remove_row(df, index)
         util.set_session_state_value(st, df_key, new_df)
         st.session_state[constants.modded_key] = True
         # set_df(st, df_func.remove_col(df_func.get_df(st, df_key), index))
@@ -78,7 +78,9 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
         # update sheet
         if st.session_state[constants.modded_key]:
             if commit:
-                gsheets.create_or_update_the_table(util.get_session_state_value(st, df_key), table_name)
+                df = gsheets.create_or_update_the_table(util.get_session_state_value(st, df_key), table_name)
+                # cache the df
+                util.set_session_state_value(st=st, key=df_key, value=df)
             st.session_state[constants.modded_key] = False
 
         # clear all state

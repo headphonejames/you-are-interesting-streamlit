@@ -75,11 +75,13 @@ def load_or_create_the_table(st, table_name, df_key_name, columns=None):
         df = create_or_update_the_table(dataframe=df, table_name=table_name)
         worksheet = sh.worksheet(table_name)
 
+    # cache the df
     util.set_session_state_value(st=st, key=df_key_name, value=df)
     # stash specific worksheet in cache, create the worksheet obj if not exist
     worksheets = util.get_session_state_value(st=st, key=constants.worksheets_df_key, initValue={})
     worksheets[df_key_name] = worksheet
     util.set_session_state_value(st=st, key=constants.worksheets_df_key, value=worksheets)
+    return df
 
 # Update to Sheet
 def create_or_update_the_table(dataframe, table_name):

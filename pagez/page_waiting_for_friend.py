@@ -42,7 +42,6 @@ def execute():
 
         # update the timesheet index in workers dataframe
         workers_df.at[worker_sheet_index,constants.worker_timesheet_index] = worker_timesheet_index + 1
-        workers_df.reset_index(drop=True)
 
         # update "isworking" in google sheet to false
         column_index = workers_df.columns.get_loc(constants.worker_is_working) + 1
