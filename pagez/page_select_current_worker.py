@@ -39,10 +39,11 @@ def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sh
     worker_timesheet_table = util.get_worker_timesheet_table_name(worker_name)
     # create worker timesheet if not exists, otherwise load it
     if worker_timesheet_df_key not in st.session_state:
-        gsheets.load_or_create_the_table(st=st,
-                                         table_name=worker_timesheet_table,
-                                         df_key_name=worker_timesheet_df_key,
-                                         columns=constants.worker_shift_column_names)
+        gsheets.load_table(st=st,
+                           table_name=worker_timesheet_table,
+                           df_key_name=worker_timesheet_df_key,
+                           createTable=True,
+                           columns=constants.worker_shift_column_names)
 
     # get worker timesheet sheet
     worksheets = util.get_session_state_value(st, constants.worksheets_df_key)
@@ -59,10 +60,11 @@ def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sh
     worker_log_table = util.get_worker_log_table_name(worker_name)
     # create worker log if not exists, otherwise load it
     if worker_log_df_key not in st.session_state:
-        gsheets.load_or_create_the_table(st=st,
-                                         table_name=worker_log_table,
-                                         df_key_name=worker_log_df_key,
-                                         columns=constants.worker_log_column_names)
+        gsheets.load_table(st=st,
+                           table_name=worker_log_table,
+                           df_key_name=worker_log_df_key,
+                           createTable=True,
+                           columns=constants.worker_log_column_names)
 
 
     # go to waiting_for_friend
@@ -73,10 +75,11 @@ def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sh
 def execute():
     # initialize dataframe
     if constants.workers_df_key not in st.session_state:
-        gsheets.load_or_create_the_table(st=st,
-                                         table_name=constants.workers_table_name,
-                                         df_key_name=constants.workers_df_key,
-                                         columns=constants.workers_config_columns_names)
+        gsheets.load_table(st=st,
+                           table_name=constants.workers_table_name,
+                           df_key_name=constants.workers_df_key,
+                           createTable=True,
+                           columns=constants.workers_config_columns_names)
     df = util.get_session_state_value(st, constants.workers_df_key)
     for index, row in df.iterrows():
         worker_name = row[constants.workers_name]

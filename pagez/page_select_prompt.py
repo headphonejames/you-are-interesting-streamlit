@@ -1,7 +1,11 @@
 import streamlit as st
 import lib.util as util
 import constants
+
 def execute():
-    st.button("setup worker list", on_click=util.update_current_page, kwargs={"page": constants.WORKERS})
-    st.button("setup prompts list", on_click=util.update_current_page, kwargs={"page": constants.PROMPTS})
-    st.button("start shift", on_click=util.update_current_page, kwargs={"page": constants.START_SHIFT})
+    st.title("Prompts for connection")
+    # get prompts
+    prompts = util.get_persisted_data(constants.prompts_dataframe_key_name, constants.prompts_table_name)
+    st.button("other")
+    for prompt in prompts:
+        st.button(prompt)

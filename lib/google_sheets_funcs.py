@@ -60,7 +60,7 @@ def get_worksheet(name):
 
 # Get the sheet as dataframe
 # @st.cache(allow_output_mutation=True, ttl = cache_time)
-def load_or_create_the_table(st, table_name, df_key_name, columns=None):
+def load_table(st, table_name, df_key_name, createTable=False, columns=None):
     try:
         worksheet = sh.worksheet(table_name)
         df = spread.sheet_to_df(index=0, sheet=worksheet)
@@ -69,11 +69,14 @@ def load_or_create_the_table(st, table_name, df_key_name, columns=None):
         print(e)
         tb = traceback.format_exc()
         print(tb)
-        # create the dataframe for the table
-        df = createDataframe(columns=columns)
-        # create the table
-        df = create_or_update_the_table(dataframe=df, table_name=table_name)
-        worksheet = sh.worksheet(table_name)
+        if createTable:
+            # create the dataframe for the table
+            df = createDataframe(columns=columns)
+            # create the table
+            df = create_or_update_the_table(dataframe=df, table_name=table_name)
+            worksheet = sh.worksheet(table_name)
+        else:
+            raise e
 
     # cache the df
     util.set_session_state_value(st=st, key=df_key_name, value=df)

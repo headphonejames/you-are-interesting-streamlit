@@ -33,7 +33,7 @@ workers_config_columns_names = [workers_name,
                                 timestamp_str]
 workers_df_key = "workers-df"
 workers_item_name = "workers"
-st_data_key = "data"
+ui_input_data = "data"
 worksheets_df_key = "worksheets"
 
 worker_timesheet_df_key="timesheet"

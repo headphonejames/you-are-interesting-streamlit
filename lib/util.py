@@ -1,6 +1,7 @@
 import constants
 import streamlit as st
 import xlsxwriter
+from lib import google_sheets_funcs as gsheets
 
 def set_session_state_value(st, key, value):
     print("set_session_state_value: {} {}".format(key, value))
@@ -42,3 +43,25 @@ def get_worker_log_df_key(worker_name):
 
 def get_column_google_name(column_index):
     return xlsxwriter.utility.xl_col_to_name(column_index)
+
+def get_persisted_data(df_key, table_name):
+    if df_key not in st.session_state:
+        gsheets.load_table(st=st,
+                           table_name=table_name,
+                           df_key_name=df_key,
+                           createTable=False)
+
+    return get_session_state_value(st, df_key)
+
+def init_value(key, defaultValue):
+    if not key in st.session_state:
+        st.session_state[key] = defaultValue
+
+
+def init_table(key, table_name, column_names):
+    if key not in st.session_state:
+        gsheets.load_table(st=st,
+                           table_name=table_name,
+                           df_key_name=key,
+                           createTable=True,
+                           columns=column_names)

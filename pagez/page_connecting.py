@@ -52,5 +52,5 @@ def execute():
 
         util.update_current_page(constants.WAITING_FOR_FRIEND)
 
-    st.button("select prompt", on_click=util.update_current_page, kwargs={"page": constants.PROMPTS})
+    st.button("select prompt", on_click=util.update_current_page, kwargs={"page": constants.SELECT_PROMPT})
     st.button("connection complete", on_click=return_to_waiting)
