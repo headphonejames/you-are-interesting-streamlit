@@ -3,7 +3,6 @@ import streamlit as st
 import constants
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
-import datetime
 import lib.util as util
 
 def execute(df_key, table_name, columns_names, item_key_column_name, item_key, default_values):
@@ -42,7 +41,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
                 if column_name in default_values and constants.default_value in default_values[column_name]:
                     data[column_name] = default_values[column_name][constants.default_value]
             # add a timestamp to this row
-            data[constants.timestamp_str] = datetime.datetime.now()
+            data[constants.timestamp_str] = util.timestamp()
             #update datatable
             df = df_func.add_row(df, data)
             util.set_session_state_value(st, df_key, df)

@@ -2,7 +2,6 @@ import streamlit as st
 import lib.util as util
 import constants
 from lib import google_sheets_funcs as gsheets
-import datetime
 
 def execute():
     def finish_shift():
@@ -23,7 +22,7 @@ def execute():
         gsheets.update_cell(worksheet=timesheet_worksheet,
                     row=worker_timesheet_index + 1,
                     column=column_index,
-                    value=str(datetime.datetime.now()))
+                    value=util.str_timestamp())
 
         # change isWorking to false and update timesheet index
         # get worker data
@@ -71,16 +70,15 @@ def execute():
         log_worksheet = worksheets[log_worksheet_df_key]
 
         # get column for setting the stop time for the shift
-        columns = [str(datetime.datetime.now()), "", "", "", 0, ""]
+        columns = [util.str_timestamp(), "", "", "", 0, ""]
 
         # create a timestamp in that column
         gsheets.append_row(worksheet=log_worksheet,
                            values=columns)
 
-        util.update_current_page(constants.CONTACT)
+        util.update_current_page(constants.CONNECTION_BEGINS)
 
-    st.write("Waiting for friend")
     worker_name = util.get_session_state_value(st, constants.workers_name_cached)
-    st.write("worker_name {}".format(worker_name))
+    st.title("{}: Waiting for friend".format(worker_name))
     st.button("Contact initiated", on_click = begin_contact)
     st.button("Finish shift", key="finished", on_click = finish_shift)

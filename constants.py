@@ -5,9 +5,10 @@ START_SHIFT = "startshift"
 PROMPTS = "prompts"
 WORKERS = "workers"
 WAITING_FOR_FRIEND = "waiting-for-friend"
-CONTACT = "contact"
-SELECT_PROMPT = "select-prompt"
-COMPLETE = "complete"
+CONNECTION_BEGINS = "connection-begins"
+CONNECTION_SELECT_PROMPT = "connection-select-prompt"
+CONNECTION_HAPPENING = "connection-happening"
+CONNECTION_COMPLETE = "connection-complete"
 
 modded_key = "modded"
 
@@ -64,3 +65,6 @@ prompts_column_name = "prompts"
 prompts_dataframe_key_name = "prompts_dataframe"
 prompts_item_name = "prompts"
 prompts_config_columns_names = [prompts_column_name, timestamp_str]
+
+notes_key = "notes"
+rating_key = "rating"

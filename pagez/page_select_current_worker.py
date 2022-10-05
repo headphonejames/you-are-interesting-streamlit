@@ -2,8 +2,6 @@ import streamlit as st
 import constants
 import lib.util as util
 from lib import google_sheets_funcs as gsheets
-from lib import df_funcs as df_func
-import datetime
 
 def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sheet_index):
     # get worker data
@@ -49,7 +47,7 @@ def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sh
     worksheets = util.get_session_state_value(st, constants.worksheets_df_key)
     worksheet = worksheets[worker_timesheet_df_key]
     # add a row to the timesheet sheet
-    column_values = [str(datetime.datetime.now()), ""]
+    column_values = [util.str_timestamp(), ""]
     gsheets.insert_row(worksheet=worksheet, column_values=column_values)
 
     # cache the worker's worker sheet index
@@ -73,13 +71,8 @@ def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sh
 
 
 def execute():
-    # initialize dataframe
-    if constants.workers_df_key not in st.session_state:
-        gsheets.load_table(st=st,
-                           table_name=constants.workers_table_name,
-                           df_key_name=constants.workers_df_key,
-                           createTable=True,
-                           columns=constants.workers_config_columns_names)
+    util.init_table(constants.workers_df_key, constants.workers_table_name, constants.workers_config_columns_names)
+
     df = util.get_session_state_value(st, constants.workers_df_key)
     for index, row in df.iterrows():
         worker_name = row[constants.workers_name]
