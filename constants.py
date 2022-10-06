@@ -1,3 +1,5 @@
+from pagez import *
+
 #page constants
 CURRENT_PAGE = "currentpage"
 ENRTY = "entry"
@@ -9,6 +11,19 @@ CONNECTION_BEGINS = "connection-begins"
 CONNECTION_SELECT_PROMPT = "connection-select-prompt"
 CONNECTION_HAPPENING = "connection-happening"
 CONNECTION_COMPLETE = "connection-complete"
+
+from pagez import *
+map = {
+    ENRTY: page_entry,
+    WORKERS: page_manage_worker_list,
+    PROMPTS: page_prompts,
+    START_SHIFT: page_select_current_worker,
+    WAITING_FOR_FRIEND: page_waiting_for_friend,
+    CONNECTION_BEGINS: page_connection_begins,
+    CONNECTION_SELECT_PROMPT: page_connection_select_prompt,
+    CONNECTION_HAPPENING: page_connection_happening,
+    CONNECTION_COMPLETE: page_connection_completed
+}
 
 modded_key = "modded"
 
