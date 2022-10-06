@@ -26,6 +26,9 @@ def get_session_state_value(st, key, initValue=None):
 def update_current_page(page):
     st.session_state[constants.CURRENT_PAGE] = page
 
+def get_current_page():
+    return st.session_state[constants.CURRENT_PAGE]
+
 def convert_to_boolean(value):
     if isinstance(value, bool):
         return value

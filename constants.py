@@ -12,7 +12,6 @@ CONNECTION_SELECT_PROMPT = "connection-select-prompt"
 CONNECTION_HAPPENING = "connection-happening"
 CONNECTION_COMPLETE = "connection-complete"
 
-from pagez import *
 map = {
     ENRTY: page_entry,
     WORKERS: page_manage_worker_list,
