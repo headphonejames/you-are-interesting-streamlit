@@ -17,4 +17,4 @@ def execute():
         prompt = row[constants.prompts_column_name]
         st.button(prompt, on_click=connection_happening, key=index, args=(prompt, ))
 
-    st.button("connection complete", on_click=util.return_to_waiting)
+    st.button("connection complete", on_click=util.return_to_waiting, args=(st, ))

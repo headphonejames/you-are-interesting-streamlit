@@ -82,3 +82,5 @@ prompts_config_columns_names = [prompts_column_name, timestamp_str]
 
 notes_key = "notes"
 rating_key = "rating"
+start_timestamp_key = "start-timestamp"
+end_timestamp_key = "end-timestamp"

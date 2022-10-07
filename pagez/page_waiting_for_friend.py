@@ -70,13 +70,15 @@ def execute():
         log_worksheet = worksheets[log_worksheet_df_key]
 
         # get column for setting the stop time for the shift
-        columns = [util.str_timestamp(), "", "", "", 0, ""]
-
-        # create a timestamp in that column
+        columns = ["", "", "", "", "", 0, ""]
+        # add it to the sheet
         gsheets.append_row(worksheet=log_worksheet,
                            values=columns)
+        # update starttime
+        # TODO fix update datetime afterwards for consistent data format
+        util.connection_start_persist_db(st)
 
-        util.update_current_page(constants.CONNECTION_BEGINS)
+    util.update_current_page(constants.CONNECTION_BEGINS)
 
     worker_name = util.get_session_state_value(st, constants.workers_name_cached)
     st.title("{}: Waiting for friend".format(worker_name))

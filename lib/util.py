@@ -74,15 +74,35 @@ def init_table(key, table_name, column_names):
                            columns=column_names)
 
 def timestamp():
-    return datetime.datetime.now()
+    return datetime.datetime.now().replace(microsecond=0)
 
 def str_timestamp():
     return str(timestamp())
 
 ## flow functions
 
-def connection_complete_update_db():
-    connection_update_current_connection_in_db(constants.worker_log_time_finished, str_timestamp())
+def connection_timestamp_update_db(st, key, column_name):
+    # cache the starttime
+    now_datetime = timestamp()
+    set_session_state_value(st, key, now_datetime)
+    # update in db
+    connection_update_current_connection_in_db(column_name, str(now_datetime))
+
+
+def connection_start_persist_db(st):
+    connection_timestamp_update_db(st, constants.start_timestamp_key, constants.worker_log_time_contact)
+
+def connection_start_time_update_db(endtime_timestamp, mins):
+    timestamp_delta = datetime.timedelta(minutes=mins)
+    print(timestamp_delta)
+    print(endtime_timestamp)
+    print("aSDf")
+    begin_timestamp = endtime_timestamp - timestamp_delta
+    print(begin_timestamp)
+    connection_update_current_connection_in_db(constants.worker_log_time_contact, str(begin_timestamp))
+
+def connection_complete_persist_db(st):
+    connection_timestamp_update_db(st, constants.end_timestamp_key, constants.worker_log_time_finished)
 
 def connection_update_current_connection_in_db(column, value):
     # update google sheets with completed time
@@ -104,7 +124,6 @@ def connection_update_current_connection_in_db(column, value):
                         row=worker_log_index + 1,
                         column=column_index,
                         value=value)
-
 
 def bump_log_index():
     # get worker data
@@ -133,8 +152,8 @@ def bump_log_index():
     set_session_state_value(st, constants.worker_log_index, worker_log_index + 1)
 
 
-def return_to_waiting():
-    connection_complete_update_db()
+def return_to_waiting(st):
+    connection_complete_persist_db(st)
     bump_log_index()
     update_current_page(constants.WAITING_FOR_FRIEND)
 
