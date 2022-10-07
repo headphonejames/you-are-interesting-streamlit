@@ -1,11 +1,11 @@
-![You are interesting](img/YAI-logo-color.png)
+![You are interesting](img/YAI-logo-color-sm.png)
 
 
 ## Companion app for the [You are interesting](https://www.youareinteresting.org) project.
 
 
 The [You are Interesting](https://www.youareinteresting.org) project is an experiment in creating a context for brief, fun conversations with people who are open to connecting with strangers.
-
+1
 You definitely don't need to track metrics to execute on this idea, but if you wanted to, this is the app to do it.
 
 #### It tracks:
