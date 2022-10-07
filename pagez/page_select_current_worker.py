@@ -65,6 +65,9 @@ def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sh
                            columns=constants.worker_log_column_names)
 
 
+    # cache prompts if not already in df
+    util.get_persisted_data(constants.prompts_dataframe_key_name, constants.prompts_table_name)
+
     # go to waiting_for_friend
     util.update_current_page(constants.WAITING_FOR_FRIEND)
 
@@ -84,5 +87,4 @@ def execute():
                       on_click = start_shift,
                       args=(worker_name, int(worker_timesheet_index),
                             int(worker_log_index), index, ))
-
     st.button("back to main", on_click=util.update_current_page, kwargs={"page": constants.ENRTY})

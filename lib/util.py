@@ -138,3 +138,5 @@ def return_to_waiting():
     bump_log_index()
     update_current_page(constants.WAITING_FOR_FRIEND)
 
+def reset_prompt_list(st):
+    gsheets.reload_table(st, constants.prompts_table_name, constants.prompts_dataframe_key_name)

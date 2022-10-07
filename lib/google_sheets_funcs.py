@@ -111,3 +111,8 @@ def update_cells(worksheet, row, columns, values):
 
 def insert_row(worksheet, column_values):
     worksheet.append_row(column_values)
+
+def reload_table(st, table_name, df_key):
+    worksheet = sh.worksheet(table_name)
+    df = spread.sheet_to_df(index=0, sheet=worksheet)
+    util.set_session_state_value(st, df_key, df)

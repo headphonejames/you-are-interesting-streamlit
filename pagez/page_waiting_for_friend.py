@@ -81,4 +81,5 @@ def execute():
     worker_name = util.get_session_state_value(st, constants.workers_name_cached)
     st.title("{}: Waiting for friend".format(worker_name))
     st.button("Contact initiated", on_click = begin_contact)
+    st.button("Reload Prompts", on_click= util.reset_prompt_list, args=(st, ))
     st.button("Finish shift", key="finished", on_click = finish_shift)
