@@ -5,8 +5,8 @@
 
 
 The [You are Interesting](https://www.youareinteresting.org) project is an experiment in creating a context for brief, fun conversations with people who are open to connecting with strangers.
-1
-You definitely don't need to track metrics to execute on this idea, but if you wanted to, this is the app to do it.
+
+This app isn't required to execute on this idea, but if you wanted track metrics of the connections being made, this is the app to do it.
 
 #### It tracks:
 * Who is staffing the project at any given time
