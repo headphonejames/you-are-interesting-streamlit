@@ -125,6 +125,10 @@ def connection_update_current_connection_in_db(column, value):
                         column=column_index,
                         value=value)
 
+def complete_connection():
+    connection_complete_persist_db(st)
+    update_current_page(constants.CONNECTION_COMPLETE)
+
 def bump_log_index():
     # get worker data
     workers_df = get_session_state_value(st, constants.workers_df_key)
