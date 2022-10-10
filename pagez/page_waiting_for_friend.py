@@ -9,20 +9,8 @@ def execute():
         worker_name = util.get_session_state_value(st, constants.workers_name_cached)
         # get the index in the timesheet to update
         worker_timesheet_index = util.get_session_state_value(st, constants.worker_timesheet_index)
-
-        # get timesheet worksheet
-        timesheet_worksheet_df_key = util.get_worker_timesheet_df_key(worker_name)
-        worksheets = util.get_session_state_value(st, constants.worksheets_df_key)
-        timesheet_worksheet = worksheets[timesheet_worksheet_df_key]
-
-        # get column for setting the stop time for the shift
-        column_index = constants.worker_shift_column_names.index(constants.worker_shift_stop) + 1
-
-        # create a timestamp in that column
-        gsheets.update_cell(worksheet=timesheet_worksheet,
-                    row=worker_timesheet_index + 1,
-                    column=column_index,
-                    value=util.str_timestamp())
+        # update the worker shift time
+        util.update_timestamp_timesheet_log(worker_name, worker_timesheet_index, constants.worker_shift_stop)
 
         # change isWorking to false and update timesheet index
         # get worker data
@@ -37,6 +25,7 @@ def execute():
 
         # update "isworking" in google sheet to false
         column_index = workers_df.columns.get_loc(constants.worker_is_working) + 1
+        worksheets = util.get_session_state_value(st, constants.worksheets_df_key)
         workers_worksheet = worksheets[constants.workers_df_key]
         worker_google_sheet_index = worker_sheet_index + 2
         gsheets.update_cell(worksheet=workers_worksheet,

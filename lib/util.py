@@ -107,6 +107,22 @@ def connection_timestamp_update_db(st, column_name):
     connection_update_current_connection_in_db(st, column_name, str(now_datetime))
 
 
+def update_timestamp_timesheet_log(worker_name, worker_timesheet_index, column_name):
+    # get timesheet worksheet
+    timesheet_worksheet_df_key = get_worker_timesheet_df_key(worker_name)
+    worksheets = get_session_state_value(st, constants.worksheets_df_key)
+    timesheet_worksheet = worksheets[timesheet_worksheet_df_key]
+
+    # get column for setting the stop time for the shift
+    column_index = constants.worker_shift_column_names.index(column_name) + 1
+
+    # create a timestamp in that column
+    gsheets.update_cell(worksheet=timesheet_worksheet,
+                        row=worker_timesheet_index + 1,
+                        column=column_index,
+                        value=str_timestamp())
+
+
 def connection_start_persist_db(st):
     connection_timestamp_update_db(st, constants.worker_log_time_contact)
 
