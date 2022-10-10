@@ -1,6 +1,24 @@
 import streamlit as st
 import lib.util as util
 import constants
+
+radio_str_key = "radio-key"
+
+fun_str = "fun!"
+pretty_fun_str = "pretty fun"
+ok_str = "ok"
+not_fun_str = "not fun"
+ineffective_str = "ineffective"
+unrated_str = "unrated"
+
+values = [unrated_str, fun_str, pretty_fun_str, ok_str, not_fun_str, ineffective_str]
+values_map = {unrated_str: 0,
+              fun_str: 5,
+              pretty_fun_str: 4,
+              ok_str: 3,
+              not_fun_str: 2,
+              ineffective_str: 1}
+
 def execute():
     is_show_slider_key = "show-slider"
     slider_key = "slider"
@@ -11,6 +29,10 @@ def execute():
         util.set_session_state_value(st, is_show_slider_key, value)
 
     def all_done():
+        rating_str = util.get_session_state_value(st, radio_str_key, 0)
+        rating_value = values_map[rating_str]
+
+
         # reset slider value
         util.set_session_state_value(st, is_show_slider_key, False)
 
@@ -23,27 +45,14 @@ def execute():
             util.connection_start_time_update_db(st, end_timestamp_str, updated_connection_length)
 
         notes = util.get_session_state_value(st, constants.notes_key)
-        rating = util.get_session_state_value(st, constants.rating_key, 0)
         util.connection_update_current_connection_in_db(st, constants.worker_log_notes, notes)
-        util.connection_update_current_connection_in_db(st, constants.worker_log_rating, rating)
+        util.connection_update_current_connection_in_db(st, constants.worker_log_rating, rating_value)
         util.return_to_waiting(st)
 
-    def update_rating(rating):
-        util.set_session_state_value(st, constants.rating_key, rating)
 
     st.title("Connection completed")
-    # hack for no 5 star rating system
-    col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
-    with col1:
-        st.button('fun!', on_click=update_rating, args=(5,))
-    with col2:
-        st.button('pretty fun', on_click=update_rating, args=(4,))
-    with col3:
-        st.button('ok', on_click=update_rating, args=(3,))
-    with col4:
-        st.button('not fun', on_click=update_rating, args=(2,))
-    with col5:
-        st.button('ineffective', on_click=update_rating, args=(1,))
+    st.radio("Rate the Connection", values, key=radio_str_key)
+
 
     st.text_area("notes", key=constants.notes_key)
     if not is_show_slider:
