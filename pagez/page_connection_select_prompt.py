@@ -4,8 +4,10 @@ import constants
 
 def execute():
     def connection_happening(prompt):
+        # set prompt time
+        util.connection_timestamp_update_db(st, constants.worker_log_time_prompt)
         # put prompt in df and db
-        util.connection_update_current_connection_in_db(constants.worker_log_prompt, prompt)
+        util.connection_update_current_connection_in_db(st, constants.worker_log_prompt, prompt)
         util.update_current_page(constants.CONNECTION_HAPPENING)
 
     st.title("Prompts for connection")

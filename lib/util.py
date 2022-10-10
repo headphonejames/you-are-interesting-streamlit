@@ -4,6 +4,7 @@ import xlsxwriter
 from lib import google_sheets_funcs as gsheets
 import datetime
 
+
 # getters and setters
 
 def set_session_state_value(st, key, value):
@@ -74,38 +75,60 @@ def init_table(key, table_name, column_names):
                            columns=column_names)
 
 def timestamp():
-    return datetime.datetime.now().replace(microsecond=0)
+    return datetime.datetime.utcnow().replace(microsecond=0)
 
 def str_timestamp():
-    return str(timestamp())
+    return timestamp().isoformat()
 
 ## flow functions
+def update_connections(st, connection):
+    connections = get_session_state_value(st, constants.connections_key)
+    log_index = get_session_state_value(st, constants.connection_index_key)
+    connections[log_index] = connection
+    set_session_state_value(st, constants.connections_key, connections)
 
-def connection_timestamp_update_db(st, key, column_name):
-    # cache the starttime
+def get_connection_from_cache(st):
+    connections = get_session_state_value(st, constants.connections_key)
+    log_index = get_session_state_value(st, constants.connection_index_key)
+    if not log_index in connections:
+        connections[log_index] = {}
+    return connections[log_index]
+
+
+def update_connection(st, key, value):
+    connection = get_connection_from_cache(st)
+    connection[key] = value
+    update_connections(st, connection)
+
+def connection_timestamp_update_db(st, column_name):
+    # cache the timestamp
     now_datetime = timestamp()
-    set_session_state_value(st, key, now_datetime)
     # update in db
-    connection_update_current_connection_in_db(column_name, str(now_datetime))
+    connection_update_current_connection_in_db(st, column_name, str(now_datetime))
 
 
 def connection_start_persist_db(st):
-    connection_timestamp_update_db(st, constants.start_timestamp_key, constants.worker_log_time_contact)
+    connection_timestamp_update_db(st, constants.worker_log_time_contact)
 
-def connection_start_time_update_db(endtime_timestamp, mins):
+def connection_start_time_update_db(st, end_timestamp_str, mins):
     timestamp_delta = datetime.timedelta(minutes=mins)
-    print(timestamp_delta)
-    print(endtime_timestamp)
-    print("aSDf")
+    endtime_timestamp = datetime.datetime.fromisoformat(end_timestamp_str)
     begin_timestamp = endtime_timestamp - timestamp_delta
-    print(begin_timestamp)
-    connection_update_current_connection_in_db(constants.worker_log_time_contact, str(begin_timestamp))
+    connection_update_current_connection_in_db(st, constants.worker_log_time_contact, str(begin_timestamp))
+    # also update prompt selection time if it exists
+    prompt_timestamp = None
+    if constants.worker_log_time_prompt in get_connection_from_cache(st):
+        prompt_timestamp = constants.worker_log_time_prompt
+    if prompt_timestamp:
+        connection_update_current_connection_in_db(st, constants.worker_log_time_prompt, str(begin_timestamp))
 
 def connection_complete_persist_db(st):
-    connection_timestamp_update_db(st, constants.end_timestamp_key, constants.worker_log_time_finished)
+    connection_timestamp_update_db(st, constants.worker_log_time_finished)
 
-def connection_update_current_connection_in_db(column, value):
-    # update google sheets with completed time
+def connection_update_current_connection_in_db(st, key, value):
+    # update value in cache
+    update_connection(st, key, value)
+
     # get worker name
     worker_name = get_session_state_value(st, constants.workers_name_cached)
     # get the index in the log to update
@@ -117,7 +140,7 @@ def connection_update_current_connection_in_db(column, value):
     log_worksheet = worksheets[log_worksheet_df_key]
 
     # get column for setting the stop time for the shift
-    column_index = constants.worker_log_column_names.index(column) + 1
+    column_index = constants.worker_log_column_names.index(key) + 1
 
     # create a timestamp in that column
     gsheets.update_cell(worksheet=log_worksheet,

@@ -4,6 +4,9 @@ import lib.util as util
 from lib import google_sheets_funcs as gsheets
 
 def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sheet_index):
+    # clear connections cache
+    util.set_session_state_value(st, constants.connections_key, {})
+
     # get worker data
     workers_df = util.get_session_state_value(st, constants.workers_df_key)
 

@@ -14,18 +14,18 @@ def execute():
         # reset slider value
         util.set_session_state_value(st, is_show_slider_key, False)
 
-        connection_length = util.get_session_state_value(st, slider_key, 0)
-        if connection_length > 0:
+        updated_connection_length = util.get_session_state_value(st, slider_key, 0)
+        if updated_connection_length > 0:
             # reset connection start time
             # get endtime
-            end_timestamp = util.get_session_state_value(st, constants.end_timestamp_key)
-            print(end_timestamp)
-            util.connection_start_time_update_db(end_timestamp, connection_length)
+            connection = util.get_connection_from_cache(st)
+            end_timestamp_str = connection[constants.worker_log_time_finished]
+            util.connection_start_time_update_db(st, end_timestamp_str, updated_connection_length)
 
         notes = util.get_session_state_value(st, constants.notes_key)
         rating = util.get_session_state_value(st, constants.rating_key, 0)
-        util.connection_update_current_connection_in_db(constants.worker_log_notes, notes)
-        util.connection_update_current_connection_in_db(constants.worker_log_rating, rating)
+        util.connection_update_current_connection_in_db(st, constants.worker_log_notes, notes)
+        util.connection_update_current_connection_in_db(st, constants.worker_log_rating, rating)
         util.return_to_waiting(st)
 
     def update_rating(rating):

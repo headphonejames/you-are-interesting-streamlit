@@ -61,8 +61,12 @@ def execute():
         #update value in log
         # get worker name
         worker_name = util.get_session_state_value(st, constants.workers_name_cached)
+
         # get the index in the log to update
         worker_log_index = util.get_session_state_value(st, constants.worker_log_index)
+
+        # cache the log index
+        util.set_session_state_value(st, constants.connection_index_key, worker_log_index)
 
         # get log worksheet
         log_worksheet_df_key = util.get_worker_log_df_key(worker_name)
