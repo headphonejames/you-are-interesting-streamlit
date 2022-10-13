@@ -8,17 +8,17 @@ import datetime
 # getters and setters
 
 def set_session_state_value(st, key, value):
-    print("set_session_state_value: {} {}".format(key, value))
+    # print("set_session_state_value: {} {}".format(key, value))
     st.session_state[key] = value
 
 def get_session_state_value(st, key, initValue=None):
-    print("get_session_state_value: {} {}".format(key, initValue))
+    # print("get_session_state_value: {} {}".format(key, initValue))
     if key in st.session_state:
-        print("found {}".format(st.session_state[key]))
+        # print("found {}".format(st.session_state[key]))
         return st.session_state[key]
     else:
         if initValue:
-            print("Init value {} {}".format(key, initValue))
+            # print("Init value {} {}".format(key, initValue))
             st.session_state[key] = initValue
         return initValue
     # otherwise force the exception

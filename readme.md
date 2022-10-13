@@ -19,3 +19,10 @@ This app isn't required to execute on this idea, but if you wanted track metrics
 * Notes you might want to take about the conversation for later reference
 
 The app is built in [Streamlit](https://streamlit.io/). It uses google sheets for the persistence layer for this project. Google sheets allows easy access to the data as well opening up ways that the data can by analyized and visualized.
+
+#### The setup
+
+[Connect Streamlit to a private Google Sheet](https://docs.streamlit.io/knowledge-base/tutorials/databases/private-gsheet)
+
+
+

@@ -1,5 +1,6 @@
 from pagez import *
 
+
 #page constants
 CURRENT_PAGE = "currentpage"
 ENRTY = "entry"

@@ -4,7 +4,6 @@ from google.oauth2 import service_account
 from gspread_pandas import Spread,Client
 
 import lib.util as util
-from lib import df_funcs as df_func
 import constants
 import traceback
 
@@ -12,7 +11,7 @@ import traceback
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
-xls_name = "initial you are interesting"
+xls_name = "you are interesting demo"
 
 cache_time = 10
 
@@ -106,7 +105,6 @@ def update_cells(worksheet, row, columns, values):
             str = "{}{}".format(column_name, row)
         else:
             str = str + ":" + "{}{}".format(column_name,row)
-    print(str)
     worksheet.update(str, values)
 
 def insert_row(worksheet, column_values):
