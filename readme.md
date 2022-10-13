@@ -32,3 +32,5 @@ https://headphonejames-you-are-interesting-streamlit-main-demo-djp99l.streamlita
 ### The spreadsheet that is being used in the demo app
 
 https://docs.google.com/spreadsheets/d/1GkS2_BsD_nDcM_lBP_OaAaXlpLbOhP_oXmn4cQNHt_4/edit?usp=sharing
+
+This project is supported by [G-Research OSS](https://opensource.gresearch.co.uk/)
