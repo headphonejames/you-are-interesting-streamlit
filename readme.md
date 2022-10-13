@@ -25,4 +25,10 @@ The app is built in [Streamlit](https://streamlit.io/). It uses google sheets fo
 [Connect Streamlit to a private Google Sheet](https://docs.streamlit.io/knowledge-base/tutorials/databases/private-gsheet)
 
 
+### Demo the app
 
+https://headphonejames-you-are-interesting-streamlit-main-demo-djp99l.streamlitapp.com/
+
+### The spreadsheet that is being used in the demo app
+
+https://docs.google.com/spreadsheets/d/1GkS2_BsD_nDcM_lBP_OaAaXlpLbOhP_oXmn4cQNHt_4/edit?usp=sharing
