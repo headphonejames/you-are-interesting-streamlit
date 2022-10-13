@@ -11,7 +11,7 @@ import traceback
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
-xls_name = "you are interesting demo"
+xls_name = st.secrets["sheet_name"]
 
 cache_time = 10
 
