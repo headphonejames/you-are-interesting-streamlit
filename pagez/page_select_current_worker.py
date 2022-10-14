@@ -5,14 +5,13 @@ from constants import workers
 from constants import shift
 from constants import worker_log
 from constants import prompts
-from constants import connection
 
 import lib.util as util
 from lib import google_sheets_funcs as gsheets
 
 def reset_cache(worker_name, worker_timesheet_index, worker_log_index, worker_sheet_index):
     # clear connections cache
-    util.set_session_state_value(st, connection.key, {})
+    util.set_session_state_value(st, constants.connections_str_key, {})
 
     #cache worker name
     util.set_session_state_value(st, workers.name_cached, worker_name)

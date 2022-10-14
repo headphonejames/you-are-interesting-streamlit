@@ -1,7 +1,12 @@
 modded_key = "modded"
 is_display_column = "isDisplayColumn"
 default_value = "default"
-timestamp_str = "timeStamp"
+timestamp_str = "timestamp"
 ui_input_data = "data"
 worksheets_df_key = "worksheets"
 worker_index = "worker_index"
+
+connection_rating_radio_index_key = "connection-rating"
+radio_str_key = "radio-key"
+notes_key = "notes"
+connections_str_key = "connections"

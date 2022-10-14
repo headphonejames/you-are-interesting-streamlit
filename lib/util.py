@@ -8,9 +8,6 @@ from constants import workers
 from constants import shift
 from constants import worker_log
 from constants import prompts
-from constants import connection
-
-
 
 # getters and setters
 
@@ -89,21 +86,35 @@ def str_timestamp():
 
 ## flow functions
 def update_connections(st, connection_obj):
-    connections = get_session_state_value(st, connection.key)
-    log_index = get_session_state_value(st, connection.index_key)
+    connections = get_session_state_value(st, constants.connections_str_key)
+    log_index = get_session_state_value(st, workers.log_index)
     connections[log_index] = connection_obj
-    set_session_state_value(st, connection.key, connections)
+    set_session_state_value(st, constants.connections_str_key, connections)
 
-def get_connection_from_cache(st):
-    connections = get_session_state_value(st, connection.key)
-    log_index = get_session_state_value(st, connection.index_key)
+def get_current_connection_from_cache(st):
+    connections = get_session_state_value(st, constants.connections_str_key)
+    log_index = get_session_state_value(st, workers.log_index)
     if not log_index in connections:
         connections[log_index] = {}
     return connections[log_index]
 
+def is_prev_connection(st):
+    connections = get_session_state_value(st, constants.connections_str_key)
+    log_index = get_session_state_value(st, workers.log_index)
+    prev_log_index = log_index - 1
+    return prev_log_index in connections
+
+def undo_finish_previous_connection(st):
+    connections = get_session_state_value(st, constants.connections_str_key)
+    log_index = get_session_state_value(st, workers.log_index)
+    prev_log_index = log_index - 1
+    previous_connection = connections[prev_log_index]
+    # reset log index
+    set_session_state_value(st, workers.log_index, prev_log_index)
+    return previous_connection
 
 def update_connection(st, key, value):
-    connection = get_connection_from_cache(st)
+    connection = get_current_connection_from_cache(st)
     connection[key] = value
     update_connections(st, connection)
 
@@ -142,7 +153,7 @@ def connection_start_time_update_db(st, end_timestamp_str, mins):
     connection_update_current_connection_in_db(st, worker_log.time_contact, str(begin_timestamp))
     # also update prompt selection time if it exists
     prompt_timestamp = None
-    if worker_log.time_prompt in get_connection_from_cache(st):
+    if worker_log.time_prompt in get_current_connection_from_cache(st):
         prompt_timestamp = worker_log.time_prompt
     if prompt_timestamp:
         connection_update_current_connection_in_db(st, worker_log.time_prompt, str(begin_timestamp))
