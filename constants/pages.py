@@ -17,7 +17,7 @@ map = {
     ENRTY: page_entry,
     WORKERS: page_manage_worker_list,
     PROMPTS: page_prompts,
-    START_SHIFT: page_select_current_worker,
+    START_SHIFT: page_start_shift,
     FINISH_SHIFT: page_shift_finished,
     WAITING_FOR_FRIEND: page_waiting_for_friend,
     CONNECTION_BEGINS: page_connection_begins,

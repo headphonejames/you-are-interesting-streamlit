@@ -8,7 +8,7 @@ is_working = "isWorking"
 contact = "contact"
 log_index = "logIndex"
 timesheet_index = "timesheetIndex"
-timestamp_str = "timeStamp"
+timestamp_str = "timestamp"
 
 columns_names = [name,
                  contact,
