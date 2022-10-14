@@ -1,8 +1,15 @@
-import constants
+from constants import constants
 import streamlit as st
 import xlsxwriter
 from lib import google_sheets_funcs as gsheets
 import datetime
+from constants import pages
+from constants import workers
+from constants import shift
+from constants import worker_log
+from constants import prompts
+from constants import connection
+
 
 
 # getters and setters
@@ -25,10 +32,10 @@ def get_session_state_value(st, key, initValue=None):
     raise Exception("AAAAAAA")
 
 def update_current_page(page):
-    st.session_state[constants.CURRENT_PAGE] = page
+    st.session_state[pages.CURRENT_PAGE] = page
 
 def get_current_page():
-    return st.session_state[constants.CURRENT_PAGE]
+    return st.session_state[pages.CURRENT_PAGE]
 
 def convert_to_boolean(value):
     if isinstance(value, bool):
@@ -36,16 +43,16 @@ def convert_to_boolean(value):
     return not value.lower() == "false"
 
 def get_worker_timesheet_table_name(worker_name):
-    return worker_name + "-" + constants.worker_timesheet_df_key
+    return worker_name + "-" + shift.timesheet_df_key
 
 def get_worker_timesheet_df_key(worker_name):
-    return worker_name + constants.worker_timesheet_df_key
+    return worker_name + shift.timesheet_df_key
 
 def get_worker_log_table_name(worker_name):
-    return worker_name + "-" + constants.worker_log_df_key
+    return worker_name + "-" + worker_log.df_key
 
 def get_worker_log_df_key(worker_name):
-    return worker_name + constants.worker_log_df_key
+    return worker_name + worker_log.df_key
 
 def get_column_google_name(column_index):
     return xlsxwriter.utility.xl_col_to_name(column_index)
@@ -81,15 +88,15 @@ def str_timestamp():
     return timestamp().isoformat()
 
 ## flow functions
-def update_connections(st, connection):
-    connections = get_session_state_value(st, constants.connections_key)
-    log_index = get_session_state_value(st, constants.connection_index_key)
-    connections[log_index] = connection
-    set_session_state_value(st, constants.connections_key, connections)
+def update_connections(st, connection_obj):
+    connections = get_session_state_value(st, connection.key)
+    log_index = get_session_state_value(st, connection.index_key)
+    connections[log_index] = connection_obj
+    set_session_state_value(st, connection.key, connections)
 
 def get_connection_from_cache(st):
-    connections = get_session_state_value(st, constants.connections_key)
-    log_index = get_session_state_value(st, constants.connection_index_key)
+    connections = get_session_state_value(st, connection.key)
+    log_index = get_session_state_value(st, connection.index_key)
     if not log_index in connections:
         connections[log_index] = {}
     return connections[log_index]
@@ -114,7 +121,7 @@ def update_timestamp_timesheet_log(worker_name, worker_timesheet_index, column_n
     timesheet_worksheet = worksheets[timesheet_worksheet_df_key]
 
     # get column for setting the stop time for the shift
-    column_index = constants.worker_shift_column_names.index(column_name) + 1
+    column_index = shift.column_names.index(column_name) + 1
 
     # create a timestamp in that column
     gsheets.update_cell(worksheet=timesheet_worksheet,
@@ -124,31 +131,31 @@ def update_timestamp_timesheet_log(worker_name, worker_timesheet_index, column_n
 
 
 def connection_start_persist_db(st):
-    connection_timestamp_update_db(st, constants.worker_log_time_contact)
+    connection_timestamp_update_db(st, worker_log.time_contact)
 
 def connection_start_time_update_db(st, end_timestamp_str, mins):
     timestamp_delta = datetime.timedelta(minutes=mins)
     endtime_timestamp = datetime.datetime.fromisoformat(end_timestamp_str)
     begin_timestamp = endtime_timestamp - timestamp_delta
-    connection_update_current_connection_in_db(st, constants.worker_log_time_contact, str(begin_timestamp))
+    connection_update_current_connection_in_db(st, worker_log.time_contact, str(begin_timestamp))
     # also update prompt selection time if it exists
     prompt_timestamp = None
-    if constants.worker_log_time_prompt in get_connection_from_cache(st):
-        prompt_timestamp = constants.worker_log_time_prompt
+    if worker_log.time_prompt in get_connection_from_cache(st):
+        prompt_timestamp = worker_log.time_prompt
     if prompt_timestamp:
-        connection_update_current_connection_in_db(st, constants.worker_log_time_prompt, str(begin_timestamp))
+        connection_update_current_connection_in_db(st, worker_log.time_prompt, str(begin_timestamp))
 
 def connection_complete_persist_db(st):
-    connection_timestamp_update_db(st, constants.worker_log_time_finished)
+    connection_timestamp_update_db(st, worker_log.time_finished)
 
 def connection_update_current_connection_in_db(st, key, value):
     # update value in cache
     update_connection(st, key, value)
 
     # get worker name
-    worker_name = get_session_state_value(st, constants.workers_name_cached)
+    worker_name = get_session_state_value(st, workers.name_cached)
     # get the index in the log to update
-    worker_log_index = get_session_state_value(st, constants.worker_log_index)
+    worker_log_index = get_session_state_value(st, workers.log_index)
 
     # get log worksheet
     log_worksheet_df_key = get_worker_log_df_key(worker_name)
@@ -156,7 +163,7 @@ def connection_update_current_connection_in_db(st, key, value):
     log_worksheet = worksheets[log_worksheet_df_key]
 
     # get column for setting the stop time for the shift
-    column_index = constants.worker_log_column_names.index(key) + 1
+    column_index = worker_log.column_names.index(key) + 1
 
     # create a timestamp in that column
     gsheets.update_cell(worksheet=log_worksheet,
@@ -166,25 +173,25 @@ def connection_update_current_connection_in_db(st, key, value):
 
 def complete_connection():
     connection_complete_persist_db(st)
-    update_current_page(constants.CONNECTION_COMPLETE)
+    update_current_page(pages.CONNECTION_COMPLETE)
 
 def bump_log_index():
     # get worker data
-    workers_df = get_session_state_value(st, constants.workers_df_key)
+    workers_df = get_session_state_value(st, workers.df_key)
 
     # get the index in the log to update
-    worker_log_index = get_session_state_value(st, constants.worker_log_index)
+    worker_log_index = get_session_state_value(st, workers.log_index)
 
     # update log index value in workers dataframe
     current_worker_row_index = get_session_state_value(st, constants.worker_index)
-    workers_df.at[current_worker_row_index,constants.worker_log_index]= worker_log_index + 1
+    workers_df.at[current_worker_row_index, workers.log_index]= worker_log_index + 1
 
     # update log index value in google sheet
     worksheets = get_session_state_value(st, constants.worksheets_df_key)
-    workers_worksheet = worksheets[constants.workers_df_key]
+    workers_worksheet = worksheets[workers.df_key]
     worker_row_index = current_worker_row_index + 2
     # update workers log index in google sheet
-    column_index = workers_df.columns.get_loc(constants.worker_log_index) + 1
+    column_index = workers_df.columns.get_loc(workers.log_index) + 1
     gsheets.update_cell(worksheet=workers_worksheet,
                         row=worker_row_index,
                         column=column_index,
@@ -192,13 +199,13 @@ def bump_log_index():
 
     #bump index in cache
     # get the index in the log to update
-    set_session_state_value(st, constants.worker_log_index, worker_log_index + 1)
+    set_session_state_value(st, workers.log_index, worker_log_index + 1)
 
 
 def return_to_waiting(st):
     connection_complete_persist_db(st)
     bump_log_index()
-    update_current_page(constants.WAITING_FOR_FRIEND)
+    update_current_page(pages.WAITING_FOR_FRIEND)
 
 def reset_prompt_list(st):
-    gsheets.reload_table(st, constants.prompts_table_name, constants.prompts_dataframe_key_name)
+    gsheets.reload_table(st, prompts.table_name, prompts.dataframe_key_name)

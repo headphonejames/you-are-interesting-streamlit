@@ -1,8 +1,10 @@
 import streamlit as st
 import lib.util as util
-import constants
+from constants import constants
+from constants import worker_log
 
 radio_str_key = "radio-key"
+notes_key = "notes"
 
 fun_str = "fun!"
 pretty_fun_str = "pretty fun"
@@ -40,13 +42,13 @@ def execute():
         if updated_connection_length > 0:
             # reset connection start time
             # get endtime
-            connection = util.get_connection_from_cache(st)
-            end_timestamp_str = connection[constants.worker_log_time_finished]
+            connection_cache = util.get_connection_from_cache(st)
+            end_timestamp_str = connection_cache[worker_log.time_finished]
             util.connection_start_time_update_db(st, end_timestamp_str, updated_connection_length)
 
-        notes = util.get_session_state_value(st, constants.notes_key)
-        util.connection_update_current_connection_in_db(st, constants.worker_log_notes, notes)
-        util.connection_update_current_connection_in_db(st, constants.worker_log_rating, rating_value)
+        notes = util.get_session_state_value(st, notes_key)
+        util.connection_update_current_connection_in_db(st, worker_log.notes, notes)
+        util.connection_update_current_connection_in_db(st, worker_log.rating, rating_value)
         util.return_to_waiting(st)
 
 
@@ -54,7 +56,7 @@ def execute():
     st.radio("Rate the Connection", values, key=radio_str_key)
 
 
-    st.text_area("notes", key=constants.notes_key)
+    st.text_area("notes", key=notes_key)
     if not is_show_slider:
         st.button("update connection time", on_click=set_show_slider, args=(True, ))
     if is_show_slider:

@@ -4,7 +4,7 @@ from google.oauth2 import service_account
 from gspread_pandas import Spread,Client
 
 import lib.util as util
-import constants
+from constants import constants
 import traceback
 
 # Create a Google Authentication connection object

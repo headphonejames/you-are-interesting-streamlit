@@ -1,6 +1,7 @@
 import streamlit as st
 
-import constants
+from constants import constants
+from constants import pages
 from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 import lib.util as util
@@ -72,7 +73,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
             # cache the df
             util.set_session_state_value(st=st, key=df_key, value=df)
         clear_state(False)
-        util.update_current_page(page=constants.ENRTY)
+        util.update_current_page(page=pages.ENRTY)
 
     if st.session_state[constants.modded_key]:
         st.button("Commit to db and return to main", on_click=done, args=(True, ))
