@@ -27,7 +27,7 @@ The app is built in [Streamlit](https://streamlit.io/). It uses google sheets fo
 
 ### Demo the app
 
-https://headphonejames-you-are-interesting-streamlit-main-demo-djp99l.streamlitapp.com/
+https://you-are-interesting.streamlitapp.com/
 
 ### The spreadsheet that is being used in the demo app
 
