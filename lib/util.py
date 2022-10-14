@@ -115,6 +115,9 @@ def connection_timestamp_update_db(st, column_name):
 
 
 def update_timestamp_timesheet_log(worker_name, worker_timesheet_index, column_name):
+    return update_timesheet_log(worker_name, worker_timesheet_index, column_name, str_timestamp())
+
+def update_timesheet_log(worker_name, worker_timesheet_index, column_name, value):
     # get timesheet worksheet
     timesheet_worksheet_df_key = get_worker_timesheet_df_key(worker_name)
     worksheets = get_session_state_value(st, constants.worksheets_df_key)
@@ -123,12 +126,11 @@ def update_timestamp_timesheet_log(worker_name, worker_timesheet_index, column_n
     # get column for setting the stop time for the shift
     column_index = shift.column_names.index(column_name) + 1
 
-    # create a timestamp in that column
+    # put a value in that column
     gsheets.update_cell(worksheet=timesheet_worksheet,
                         row=worker_timesheet_index + 1,
                         column=column_index,
-                        value=str_timestamp())
-
+                        value=value)
 
 def connection_start_persist_db(st):
     connection_timestamp_update_db(st, worker_log.time_contact)

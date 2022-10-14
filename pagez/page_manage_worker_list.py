@@ -20,7 +20,7 @@ def execute():
                         workers.timesheet_index:
                             {constants.default_value: 1,
                              constants.is_display_column: False},
-                        constants.timestamp_str:
+                        workers.timestamp_str:
                             {constants.is_display_column: False}
                         }
     )

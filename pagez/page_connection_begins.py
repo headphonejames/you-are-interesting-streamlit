@@ -1,6 +1,5 @@
 import streamlit as st
 import lib.util as util
-from constants import constants
 from constants import pages
 
 def execute():

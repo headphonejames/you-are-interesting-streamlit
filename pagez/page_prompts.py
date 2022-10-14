@@ -11,7 +11,7 @@ def execute():
         columns_names=prompts.config_columns_names,
         item_key_column_name=prompts.key_column_name,
         item_key=prompts.key,
-        default_values={constants.timestamp_str:
+        default_values={prompts.timestamp_str:
                             {constants.is_display_column: False}
                         }
     )
