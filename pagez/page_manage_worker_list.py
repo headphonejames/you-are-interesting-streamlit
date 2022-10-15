@@ -22,5 +22,6 @@ def execute():
                              constants.is_display_column: False},
                         workers.timestamp_str:
                             {constants.is_display_column: False}
-                        }
+                        },
+        unit_name=workers.unit_name
     )

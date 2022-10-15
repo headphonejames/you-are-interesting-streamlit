@@ -13,5 +13,6 @@ def execute():
         item_key=prompts.key,
         default_values={prompts.timestamp_str:
                             {constants.is_display_column: False}
-                        }
+                        },
+        unit_name=prompts.unit_name
     )

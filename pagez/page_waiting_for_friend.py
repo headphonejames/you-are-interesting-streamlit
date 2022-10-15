@@ -18,7 +18,7 @@ def execute():
         log_worksheet = worksheets[log_worksheet_df_key]
 
         # get column for setting the stop time for the shift
-        columns = ["", "", "", "", "", 0, ""]
+        columns = ["", "", "", "", 0, ""]
         # add it to the sheet
         gsheets.append_row(worksheet=log_worksheet,
                            values=columns)

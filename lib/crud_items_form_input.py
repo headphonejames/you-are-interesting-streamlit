@@ -6,7 +6,7 @@ from lib import google_sheets_funcs as gsheets
 from lib import df_funcs as df_func
 import lib.util as util
 
-def execute(df_key, table_name, columns_names, item_key_column_name, item_key, default_values):
+def execute(df_key, table_name, columns_names, item_key_column_name, item_key, default_values, unit_name):
     util.init_table(df_key, table_name, columns_names)
     util.init_value(constants.modded_key, False)
     util.init_value(constants.ui_input_data, {})
@@ -64,7 +64,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
                 value = st.session_state[column_name]
             st.text_input(label=column_name, value=value, on_change=update_text, key=column_name, args=(column_name,))
 
-    st.button(label="add {}".format(table_name), on_click=add_items, args=(df, ))
+    st.button(label="add {}".format(unit_name), on_click=add_items, args=(df, ))
 
     def done(commit=False):
         # update sheet

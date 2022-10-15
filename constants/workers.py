@@ -18,3 +18,4 @@ columns_names = [name,
                  timestamp_str]
 
 df_key = "workers-df"
+unit_name = "worker"
