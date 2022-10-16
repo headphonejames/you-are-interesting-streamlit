@@ -87,12 +87,13 @@ def start_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sh
     util.set_session_state_value(st, constants.worker_index, worker_sheet_index)
 
     # go to waiting_for_friend
-    util.update_current_page(pages.WAITING_FOR_FRIEND)
+    util.update_current_page(st, pages.WAITING_FOR_FRIEND)
 
 def resume_shift(worker_name, worker_timesheet_index, worker_log_index, worker_sheet_index):
     reset_cache(worker_name, worker_timesheet_index, worker_log_index, worker_sheet_index)
+    util.set_session_state_value(st, constants.is_resuming_shift, True)
     # go to waiting_for_friend
-    util.update_current_page(pages.WAITING_FOR_FRIEND)
+    util.update_current_page(st, pages.WAITING_FOR_FRIEND)
 
 
 def execute():
@@ -126,4 +127,4 @@ def execute():
                           args=(worker_name, int(worker_timesheet_index),
                                 int(worker_log_index), index, ))
 
-    st.button("back to main", on_click=util.update_current_page, kwargs={"page": pages.ENRTY})
+    st.button("back to main", on_click=util.update_current_page, kwargs={"st": st, "page": pages.ENRTY})

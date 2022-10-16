@@ -73,7 +73,7 @@ def execute(df_key, table_name, columns_names, item_key_column_name, item_key, d
             # cache the df
             util.set_session_state_value(st=st, key=df_key, value=df)
         clear_state(False)
-        util.update_current_page(page=pages.ENRTY)
+        util.update_current_page(st, page=pages.ENRTY)
 
     if st.session_state[constants.modded_key]:
         st.button("Commit to db and return to main", on_click=done, args=(True, ))

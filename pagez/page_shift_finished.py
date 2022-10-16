@@ -53,7 +53,7 @@ def execute():
         # update the cached dataframe
         util.set_session_state_value(st, workers.df_key, workers_df)
         # go to entry page
-        util.update_current_page(pages.ENRTY)
+        util.update_current_page(st, pages.ENRTY)
 
     st.text_area("how do you feel?", key=notes_key)
     st.button("done", on_click=finish_shift)

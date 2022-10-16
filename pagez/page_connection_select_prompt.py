@@ -10,7 +10,10 @@ def execute():
         util.connection_timestamp_update_db(st, worker_log.time_prompt)
         # put prompt in df and db
         util.connection_update_current_connection_in_db(st, worker_log.prompt, prompt)
-        util.update_current_page(pages.CONNECTION_HAPPENING)
+        if util.get_previous_page(st) == pages.CONNECTION_COMPLETE:
+            util.update_current_page(st, pages.CONNECTION_COMPLETE)
+        else:
+            util.update_current_page(st, pages.CONNECTION_HAPPENING)
 
     st.title("Prompts for connection")
     # get prompts

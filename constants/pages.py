@@ -1,7 +1,10 @@
 from pagez import *
 
 #page constants
-CURRENT_PAGE = "currentpage"
+PREVIOUS_PAGE = "previous-page"
+CURRENT_PAGE = "current-page"
+
+#pages
 ENRTY = "entry"
 START_SHIFT = "start-shift"
 FINISH_SHIFT = "finish-shift"

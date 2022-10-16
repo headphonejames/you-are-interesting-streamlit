@@ -28,7 +28,15 @@ def get_session_state_value(st, key, initValue=None):
     # otherwise force the exception
     raise Exception("AAAAAAA")
 
-def update_current_page(page):
+def get_previous_page(st):
+    if pages.PREVIOUS_PAGE in st.session_state:
+        return st.session_state[pages.PREVIOUS_PAGE]
+    return None
+
+def update_current_page(st, page):
+    # cache the previous page
+    if pages.CURRENT_PAGE in st.session_state:
+        st.session_state[pages.PREVIOUS_PAGE] = st.session_state[pages.CURRENT_PAGE]
     st.session_state[pages.CURRENT_PAGE] = page
 
 def get_current_page():
@@ -186,7 +194,7 @@ def connection_update_current_connection_in_db(st, key, value):
 
 def complete_connection():
     connection_complete_persist_db(st)
-    update_current_page(pages.CONNECTION_COMPLETE)
+    update_current_page(st, pages.CONNECTION_COMPLETE)
 
 def bump_log_index():
     # get worker data
@@ -218,7 +226,7 @@ def bump_log_index():
 def return_to_waiting(st):
     connection_complete_persist_db(st)
     bump_log_index()
-    update_current_page(pages.WAITING_FOR_FRIEND)
+    update_current_page(st, pages.WAITING_FOR_FRIEND)
 
 def reset_prompt_list(st):
     gsheets.reload_table(st, prompts.table_name, prompts.dataframe_key_name)

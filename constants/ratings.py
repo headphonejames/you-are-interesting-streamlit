@@ -26,3 +26,9 @@ def get_index_from_value(radio_value):
         if values_map[value_key][value] == radio_value:
             return values_map[value_key][index]
     return 0
+
+def get_index_from_str(radio_value_str):
+    for value_key in values_map:
+        if radio_value_str == value_key:
+            return values_map[value_key][index]
+    return 0
