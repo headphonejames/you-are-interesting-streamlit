@@ -18,7 +18,8 @@ This app isn't required to execute on this idea, but if you wanted track metrics
 * The length and quality of that connection
 * Notes you might want to take about the conversation for later reference
 
-A 3 minute [video tutorial](https://youtu.be/Pf7Mph9q2bw):
+A 3 minute [video tutorial](https://youtu.be/Pf7Mph9q2bw)
+
 [![YAI Video Thumbnail](img/you-are-interesting-thumbnail.jpg)](https://youtu.be/Pf7Mph9q2bw)
 
 
